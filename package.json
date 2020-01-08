@@ -1,0 +1,67 @@
+{
+  "name": "react-apollo-todo",
+  "version": "0.1.0",
+  "engines": {
+    "node": "8.9.1"
+  },
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "^3.0.0-beta.19",
+    "@apollo/react-hooks": "^3.1.3",
+    "@auth0/auth0-spa-js": "^1.6.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/free-solid-svg-icons": "^5.12.0",
+    "@fortawesome/react-fontawesome": "^0.1.8",
+    "@material-ui/core": "^4.8.2",
+    "@material-ui/icons": "^4.5.1",
+    "@playlyfe/gql": "^2.6.2",
+    "apollo-boost": "^0.4.7",
+    "apollo-cache-inmemory": "latest",
+    "apollo-client": "^2.6.8",
+    "apollo-link": "latest",
+    "apollo-link-context": "^1.0.19",
+    "apollo-link-http": "latest",
+    "apollo-link-ws": "^1.0.19",
+    "apollo-utilities": "latest",
+    "bootstrap": "^4.4.1",
+    "clsx": "^1.0.4",
+    "env-cmd": "^10.0.1",
+    "graphql": "^14.5.8",
+    "graphql-tag": "latest",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.22.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.12.0",
+    "react-apollo": "^3.1.3",
+    "react-bootstrap": "^1.0.0-beta.16",
+    "react-csv-reader": "^2.0.2",
+    "react-dom": "^16.12.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "subscriptions-transport-ws": "^0.9.16",
+    "uuid": "latest",
+    "webfontloader": "^1.6.28"
+  },
+  "devDependencies": {
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "react-scripts": "^3.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build && scp -r ./build/* root@speakeasy.tools:/var/www/speakeasy.tools/html",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "proxy": "http://speakeasy.services"
+}
