@@ -3,7 +3,7 @@ import React from "react";
 import {Router} from "react-router-dom";
 
 import "./utils/index.css";
-
+import * as serviceWorker from './utils/serviceWorker';
 import {Auth0Provider} from "./react-auth0-spa";
 import history from "./utils/history";
 import config from "./config";
@@ -36,3 +36,4 @@ const mainRoutes = (
 );
 
 ReactDOM.render(mainRoutes, document.getElementById("root"));
+serviceWorker.unregister();

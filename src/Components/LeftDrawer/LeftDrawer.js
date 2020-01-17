@@ -98,25 +98,29 @@ export default (props) => {
                     <ListItemText primary='Game Menu' className={clsx(classes.icon)}/>
                 </ListItem>
                 <Divider/>
-                <ListItem button key={'toneTrainer'}>
-                    <ListItemIcon><ToneTrainerIcon className={clsx(classes.icon)}/></ListItemIcon>
-                    <ListItemText primary='Tone Trainer' className={clsx(classes.icon)}/>
-                </ListItem>
+                <NavLink to='/tonetrainer'
+                         activeClassName={clsx(classes.activeLink)}
+                >
+                    <ListItem button key={'toneTrainer'}>
+                        <ListItemIcon><ToneTrainerIcon className={clsx(classes.icon)}/></ListItemIcon>
+                        <ListItemText primary='Tone Trainer' className={clsx(classes.icon)}/>
+                    </ListItem>
+                </NavLink>
                 <NavLink to='/memory'
                          activeClassName={clsx(classes.activeLink)}
                 >
-                <ListItem button key={'memory'}>
-                    <ListItemIcon><MemoryIcon className={clsx(classes.icon)}/></ListItemIcon>
-                    <ListItemText primary='Memory' className={clsx(classes.icon)}/>
-                </ListItem>
+                    <ListItem button key={'memory'}>
+                        <ListItemIcon><MemoryIcon className={clsx(classes.icon)}/></ListItemIcon>
+                        <ListItemText primary='Memory' className={clsx(classes.icon)}/>
+                    </ListItem>
                 </NavLink>
                 <NavLink to='/flashcards'
                          activeClassName={clsx(classes.activeLink)}
                 >
-                <ListItem button key={'flashCards'}>
-                    <ListItemIcon><FlashCardIcon className={clsx(classes.icon)}/></ListItemIcon>
-                    <ListItemText primary='Flash Cards' className={clsx(classes.icon)}/>
-                </ListItem>
+                    <ListItem button key={'flashCards'}>
+                        <ListItemIcon><FlashCardIcon className={clsx(classes.icon)}/></ListItemIcon>
+                        <ListItemText primary='Flash Cards' className={clsx(classes.icon)}/>
+                    </ListItem>
                 </NavLink>
                 <NavLink to='/popquiz'
                          activeClassName={clsx(classes.activeLink)}
@@ -129,10 +133,10 @@ export default (props) => {
                 <NavLink to='/2048'
                          activeClassName={clsx(classes.activeLink)}
                 >
-                <ListItem button key={'2048'}>
-                    <ListItemIcon><T48Icon className={clsx(classes.icon)}/></ListItemIcon>
-                    <ListItemText primary='2048' className={clsx(classes.icon)}/>
-                </ListItem>
+                    <ListItem button key={'2048'}>
+                        <ListItemIcon><T48Icon className={clsx(classes.icon)}/></ListItemIcon>
+                        <ListItemText primary='2048' className={clsx(classes.icon)}/>
+                    </ListItem>
                 </NavLink>
             </List>
         </Drawer>

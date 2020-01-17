@@ -49,8 +49,6 @@ export const Admin = () => {
     const classes = useStyles(Theme);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [totalRows, setTotalRows] = useState(0);
-
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -88,20 +86,20 @@ export const Admin = () => {
 
                 </Table>
             </TableContainer>
-            {/*<TablePagination
+            <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component='div'
-                count={data? data.lessons.pageInfo.total: 0}
+                count={data? data.lessons_aggregate.aggregate.count: 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
                 style={{
-                    backgroundColor: theme.palette.primary.main,
-                    color: theme.palette.primary.contrastText
+                    backgroundColor: Theme.palette.primary.main,
+                    color: Theme.palette.primary.contrastText
                 }}
-            />*/
-            <UploadFile/>}
+            />
+            <UploadFile/>
         </Paper>
     );
 }

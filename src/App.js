@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import jwt from 'jsonwebtoken';
 
-import {Footer, Header, LeftDrawer, Theme} from "./Components";
+import {/*Footer,*/ Header, LeftDrawer, Theme} from "./Components";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloProvider } from "@apollo/react-hooks";
 
@@ -14,6 +14,7 @@ import clsx from "clsx";
 import {Switch} from "react-router";
 import {MakeRoutes} from "./Routes/routes";
 import {GRAPHQL_URL} from "./utils/constants";
+import {Construction} from "./Components/Construction";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -88,7 +89,8 @@ function App ()  {
                     </Switch>
                 </div>
                 <Header userRole={userRole}/>
-                <Footer/>
+                <Construction/>
+                {/* <Footer/> */}
             </div>
         </ApolloProvider>
     )
