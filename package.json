@@ -19,6 +19,7 @@
     "apollo-link-context": "^1.0.19",
     "apollo-link-http": "latest",
     "clsx": "^1.0.4",
+    "collections": "^5.1.9",
     "graphql": "^14.5.8",
     "graphql-tag": "latest",
     "jsonwebtoken": "^8.5.1",

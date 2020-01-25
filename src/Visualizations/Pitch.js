@@ -5,7 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import {RecordVoiceOverOutlined} from "@material-ui/icons";
 import {Bar, BarChart, Line, LineChart, XAxis, YAxis} from "recharts";
 import clsx from "clsx";
-import {YIN} from "../Components/FeatureExtraction";
+import {F0} from "../Components/FeatureExtraction";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,12 +29,13 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
     const classes = useStyles(Theme);
-    const [running, setRunning, f0] = YIN();
+    const [running, setRunning, f0] = F0();
 
     const toggleRunning = () => setRunning(prevState => !prevState);
 
     const formatData = d => {
-        return [{name: 'Level', rms: d},];
+        console.log(d);
+        return [{name: 'f0', f0: d},];
     };
 
     return (
@@ -51,11 +52,11 @@ export default () => {
             <LineChart
                 width={600}
                 height={200}
-                data={[]}
+                data={f0? formatData(f0): []}
                 >
-                <YAxis type='number' domain={[17500, 18000]} stroke={Theme.palette.primary.contrastText}/>
+                <YAxis type='number' domain={[17500, 20000]} stroke={Theme.palette.primary.contrastText}/>
                 <XAxis dataKey='x' stroke={Theme.palette.primary.contrastText}/>
-                <Line type='monotone' dataKey='y' stroke={Theme.palette.primary.contrastText} strokeWidth={2}/>
+                <Line type='monotone' dataKey='f0' stroke={Theme.palette.primary.contrastText} strokeWidth={2}/>
             </LineChart>
         </div>
     )
