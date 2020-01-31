@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
+import React, {Fragment, useState} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Theme} from "../../Components";
 import {GameWrapper} from "../../Components/GameWrapper";
@@ -10,8 +10,7 @@ import gql from "graphql-tag";
 import {Pitch} from "../../Visualizations";
 
 const useStyles = makeStyles(theme => ({
-    root: {
-    },
+    root: {},
     flashCard: {
         backgroundColor: theme.palette.primary.light,
         color: theme.palette.primary.contrastText,
@@ -92,13 +91,12 @@ export default () => {
     }
 
     const getWords = () => {
-        if(data && data.lessons){
+        if (data && data.lessons) {
             const lessons = data.lessons;
-            return [...Array(Math.ceil(lessons.length/pageSize)).keys()].map(label => {
-                return lessons.slice(label*pageSize, (label+1)*pageSize)
+            return [...Array(Math.ceil(lessons.length / pageSize)).keys()].map(label => {
+                return lessons.slice(label * pageSize, (label + 1) * pageSize)
             });
-        }
-        else return {chinese: '', english: '', pinyin: ''}
+        } else return {chinese: '', english: '', pinyin: ''}
     };
 
     const getWord = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {FeatureExtraction} from "../Components/FeatureExtraction";
+import {RMS} from "../Components/FeatureExtraction";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Theme} from "../Components/Theme";
 import IconButton from "@material-ui/core/IconButton";
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
     const classes = useStyles(Theme);
-    const [running, setRunning, features] = FeatureExtraction();
+    const [running, setRunning, rms] = RMS();
 
     const toggleRunning = () => setRunning(prevState => !prevState);
 
@@ -51,7 +51,7 @@ export default () => {
             <BarChart
                 width={150}
                 height={200}
-                data={features && features.rms? formatData(features.rms): []}
+                data={rms ? formatData(rms): []}
             >
                 <YAxis type='number' domain={[0.0, 1.0]} stroke={Theme.palette.primary.contrastText}/>
                 <Bar dataKey='rms' fill={Theme.palette.secondary.main}/>

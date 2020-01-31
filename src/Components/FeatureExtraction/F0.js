@@ -18,7 +18,7 @@ export default () => {
 
             newAnalyser = audioContext.createAnalyser();
             source.connect(newAnalyser);
-            newAnalyser.fftSize = 2048;
+            newAnalyser.fftSize = 4096;
 
             const bufferLength = newAnalyser.frequencyBinCount;
             const dataArray = new Float32Array(bufferLength);
@@ -28,14 +28,18 @@ export default () => {
                     reqId = requestAnimationFrame(analyse);
                     const PitchDetector = new PitchFinder.YIN({sampleRate: audioContext.sampleRate});
                     newAnalyser.getFloatTimeDomainData(dataArray);
-                    const pitch = PitchDetector(dataArray);
-                    console.log(pitch);
-                    setF0(pitch);
+                    const pitch =  Math.round((PitchDetector(dataArray) + Number.EPSILON) * 100) / 10000;
+                    setF0(prevState => {
+                            return [...prevState, pitch]
+
+                    });
 
             }
             analyse();
 
-            newAnalyser.start = () => reqId = requestAnimationFrame(analyse);
+            newAnalyser.start = () => {
+                setF0([]);
+                reqId = requestAnimationFrame(analyse)};
 
             newAnalyser.stop = () => cancelAnimationFrame(reqId);
 

@@ -3,7 +3,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Theme} from "../Components/Theme";
 import IconButton from "@material-ui/core/IconButton";
 import {RecordVoiceOverOutlined} from "@material-ui/icons";
-import {Bar, BarChart, Line, LineChart, XAxis, YAxis} from "recharts";
+import {Line, LineChart, XAxis, YAxis} from "recharts";
 import clsx from "clsx";
 import {F0} from "../Components/FeatureExtraction";
 
@@ -34,8 +34,7 @@ export default () => {
     const toggleRunning = () => setRunning(prevState => !prevState);
 
     const formatData = d => {
-        console.log(d);
-        return [{name: 'f0', f0: d},];
+        return {name: 'f0', f0: d};
     };
 
     return (
@@ -52,9 +51,9 @@ export default () => {
             <LineChart
                 width={600}
                 height={200}
-                data={f0? formatData(f0): []}
-                >
-                <YAxis type='number' domain={[17500, 20000]} stroke={Theme.palette.primary.contrastText}/>
+                data={f0 ? f0.map(f => formatData(f)) : []}
+            >
+                <YAxis type='number' stroke={Theme.palette.primary.contrastText}/>
                 <XAxis dataKey='x' stroke={Theme.palette.primary.contrastText}/>
                 <Line type='monotone' dataKey='f0' stroke={Theme.palette.primary.contrastText} strokeWidth={2}/>
             </LineChart>
