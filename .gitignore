@@ -159,3 +159,4 @@ fabric.properties
 
 # SpeakEasy environment varialbes
 src/config.js
+package-lock.json
