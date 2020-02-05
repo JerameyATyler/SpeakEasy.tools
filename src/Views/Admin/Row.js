@@ -12,7 +12,7 @@ import Add from '@material-ui/icons/Add';
 import Clear from '@material-ui/icons/Clear';
 import Check from '@material-ui/icons/Check';
 import gql from "graphql-tag";
-import {useMutation} from "@apollo/react-hooks";
+import {useMutation, useQuery} from "@apollo/react-hooks";
 import {columns} from "./Header";
 
 const Row = (props) => {
@@ -23,6 +23,20 @@ const Row = (props) => {
         affected_rows
       }
     }
+    `;
+
+    const GET_NATIVE_EXAMPLES = gql`
+        query GetNativeExamples($graphemes: String!) {
+            corpus(limit: 10, where: {graphemes: {_eq: $graphemes}}) {
+                phonemes
+            }
+            corpus_aggregate(where: {graphemes: {_eq: $graphemes}}) {
+                aggregate {
+                    count
+                }
+            }
+        }
+
     `;
 
     const [deleteLessonMutation] = useMutation(DELETE_LESSON,
@@ -39,7 +53,10 @@ const Row = (props) => {
     };
 
     const [edit, setEdit] = useState(false);
+    const {loading, error, data} = useQuery(GET_NATIVE_EXAMPLES, {variables: {graphemes: lesson.chinese}});
 
+    if (loading) return null;
+    if (error) return `Error! ${error.message}`;
 
     return (
         <TableRow hover role='checkbox' tabIndex={-1} key={lesson.id}>

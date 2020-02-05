@@ -16,6 +16,7 @@ import MemoryIcon from '@material-ui/icons/ViewComfy';
 import FlashCardIcon from '@material-ui/icons/CreditCard';
 import PopQuizIcon from '@material-ui/icons/SpeakerNotes';
 import T48Icon from '@material-ui/icons/GridOn';
+import UnoIcon from '@material-ui/icons/FlipCameraAndroid';
 import {Theme} from "../Theme";
 import {NavLink} from "react-router-dom";
 
@@ -136,6 +137,14 @@ export default (props) => {
                     <ListItem button key={'2048'}>
                         <ListItemIcon><T48Icon className={clsx(classes.icon)}/></ListItemIcon>
                         <ListItemText primary='2048' className={clsx(classes.icon)}/>
+                    </ListItem>
+                </NavLink>
+                <NavLink to='/uno'
+                         activeClassName={clsx(classes.activeLink)}
+                >
+                    <ListItem button key={'Uno'}>
+                        <ListItemIcon><UnoIcon className={clsx(classes.icon)}/></ListItemIcon>
+                        <ListItemText primary='Uno' className={clsx(classes.icon)}/>
                     </ListItem>
                 </NavLink>
             </List>
