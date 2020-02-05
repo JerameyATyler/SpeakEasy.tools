@@ -31,6 +31,8 @@
     "react-dom": "^16.12.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
+    "react-swipeable-views": "^0.13.8",
+    "react-swipeable-views-utils": "^0.13.7",
     "recharts": "^2.0.0-beta.1",
     "uuid": "latest",
     "victory": "^34.0.0",

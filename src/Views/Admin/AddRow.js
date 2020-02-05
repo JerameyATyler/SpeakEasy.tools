@@ -16,7 +16,6 @@ import {useAuth0} from "../../react-auth0-spa";
 
 const AddRow = () => {
     const {user} = useAuth0();
-    console.log(user);
     const [state, setstate] = useState({
         chinese: null,
         pinyin: null,

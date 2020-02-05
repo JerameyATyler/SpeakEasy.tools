@@ -5,7 +5,6 @@ import AddRow from "./AddRow";
 
 const Body = (props) => {
     const data = props.data;
-    console.log(data);
     return (
         <TableBody>
             {data.map(lesson =>

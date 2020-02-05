@@ -8,12 +8,14 @@ import Edit from "@material-ui/icons/Edit";
 import Delete from "@material-ui/icons/Delete";
 import TableRow from "@material-ui/core/TableRow";
 import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
-import Add from '@material-ui/icons/Add';
 import Clear from '@material-ui/icons/Clear';
 import Check from '@material-ui/icons/Check';
 import gql from "graphql-tag";
-import {useMutation, useQuery} from "@apollo/react-hooks";
+import {useMutation} from "@apollo/react-hooks";
 import {columns} from "./Header";
+import GetNatives from "./GetNatives";
+import Modal from "@material-ui/core/Modal";
+import NativeCarousel from "./NativeCarousel";
 
 const Row = (props) => {
     const lesson = props.data;
@@ -25,23 +27,11 @@ const Row = (props) => {
     }
     `;
 
-    const GET_NATIVE_EXAMPLES = gql`
-        query GetNativeExamples($graphemes: String!) {
-            corpus(limit: 10, where: {graphemes: {_eq: $graphemes}}) {
-                phonemes
-            }
-            corpus_aggregate(where: {graphemes: {_eq: $graphemes}}) {
-                aggregate {
-                    count
-                }
-            }
-        }
-
-    `;
-
     const [deleteLessonMutation] = useMutation(DELETE_LESSON,
         {
-            onCompleted(){window.location.reload();}
+            onCompleted() {
+                window.location.reload();
+            }
         });
 
     const deleteLesson = e => {
@@ -53,20 +43,25 @@ const Row = (props) => {
     };
 
     const [edit, setEdit] = useState(false);
-    const {loading, error, data} = useQuery(GET_NATIVE_EXAMPLES, {variables: {graphemes: lesson.chinese}});
+    const [nativeExamples, setNativeExamples] = useState(null);
+    const [open, setOpen] = useState(false);
 
-    if (loading) return null;
-    if (error) return `Error! ${error.message}`;
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <TableRow hover role='checkbox' tabIndex={-1} key={lesson.id}>
             {columns.slice(0, 6).map(column => (
                 <TableCell
-                key={column.id}
-                style={{
-                    minWidth: column.minWidth,
-                    color: Theme.palette.secondary.contrastText,
-                }}
+                    key={column.id}
+                    style={{
+                        minWidth: column.minWidth,
+                        color: Theme.palette.secondary.contrastText,
+                    }}
                 >
                     {edit &&
                     <Input
@@ -75,11 +70,11 @@ const Row = (props) => {
                     />
                     }
                     {!edit &&
-                        <Typography
-                            variant='subtitle1'
-                            >
-                            {lesson[column.id]}
-                        </Typography>
+                    <Typography
+                        variant='subtitle1'
+                    >
+                        {lesson[column.id]}
+                    </Typography>
                     }
                 </TableCell>
             ))}
@@ -89,18 +84,32 @@ const Row = (props) => {
                     minWidth: 85,
                     color: Theme.palette.secondary.contrastText
                 }}
-            >
-
-                <IconButton
-                    style={{color: Theme.palette.secondary.contrastText}}
-                >
-                    {
-                        edit ?
-                            <Add/>
-                            :
-                            <RecordVoiceOverIcon/>
-                    }
-                </IconButton>
+            > {nativeExamples ?
+                <>
+                    <IconButton
+                        style={{color: Theme.palette.secondary.contrastText}}
+                        onClick={handleOpen}
+                    >
+                        <RecordVoiceOverIcon/>
+                    </IconButton>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                    >
+                        <>
+                            <NativeCarousel
+                                natives={nativeExamples}
+                            />
+                        </>
+                    </Modal>
+                </>
+                :
+                <GetNatives
+                    graphemes={lesson.chinese}
+                    setNatives={setNativeExamples}
+                    setOpen={setOpen}
+                />
+            }
             </TableCell>
             <TableCell
                 key='edit'
