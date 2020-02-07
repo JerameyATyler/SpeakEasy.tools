@@ -45,17 +45,27 @@ export default (props) => { // Props are properties and these are passed into co
     // carefully.
     */
     const [anchorE1, setAnchorE1] = useState(null);
-
+    const [anchorE2, setAnchorE2] = useState(null);
     // This handles what happens when the user clicks the menu button
-    const handleClick = event => {
+    const handleE1Click = event => {
         // Set the menu's anchor to the spot where the user clicked
         setAnchorE1(event.currentTarget);
     };
 
+    const handleE2Click = event => {
+        // Set the menu's anchor to the spot where the user clicked
+        setAnchorE2(event.currentTarget);
+    };
+
     // This handles what happens when the menu closes
-    const handleClose = () => {
+    const handleE1Close = () => {
         // We set the anchor to null so that the menu can close
         setAnchorE1(null);
+    };
+
+    const handleE2Close = () => {
+        // We set the anchor to null so that the menu can close
+        setAnchorE2(null);
     };
 
     return (
@@ -63,18 +73,18 @@ export default (props) => { // Props are properties and these are passed into co
             <Button
                 variant='contained'
                 color='secondary'
-                aria-controls='my menu'
+                aria-controls='mode-menu'
                 aria-haspopup='true'
-                onClick={handleClick}
+                onClick={handleE1Click}
                 >
                 My Menu {/* This is the actual text that is on the button */}
             </Button>
             <Menu
-                id='my_menu'
+                id='mode'
                 anchorEl={anchorE1}
                 keepMounted
                 open={Boolean(anchorE1)}
-                onClose={handleClose}
+                onClose={handleE1Close}
                 >
                 <FormControl
                     component='fieldset'
@@ -84,14 +94,54 @@ export default (props) => { // Props are properties and these are passed into co
                         className={clsx(classes.formLabel)}
                         component='legend'
                     >
-                        My Options {/* Label text */}
+                        Game Mode {/* Label text */}
                     </FormLabel>
                     <RadioGroup
-                        aria-label='my-options'
-                        name='my-options'
+                        aria-label='game-mode'
+                        name='game-mode'
                         value={props.options}
                         onChange={e => props.setOptions(e.target.value)}
                         >
+                        <FormControlLabel value={'chinese'} control={<Radio/>} label='Chinese'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'pinyin'} control={<Radio/>} label='Pinyin'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'english'} control={<Radio/>} label='English'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'adaptive'} control={<Radio/>} label='Adaptive'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'chaos'} control={<Radio/>} label='Chaos'><MenuItem/></FormControlLabel>
+                    </RadioGroup>
+                </FormControl>
+            </Menu>
+            <Button
+                variant='contained'
+                color='secondary'
+                aria-controls='player-menu'
+                aria-haspopup='true'
+                onClick={handleE2Click}
+            >
+                Player Number {/* This is the actual text that is on the button */}
+            </Button>
+            <Menu
+                id='players'
+                anchorE2={anchorE2}
+                keepMounted
+                open={Boolean(anchorE2)}
+                onClose={handleE2Close}
+            >
+                <FormControl
+                    component='fieldset'
+                    className={clsx(classes.formControl)}
+                >
+                    <FormLabel
+                        className={clsx(classes.formLabel)}
+                        component='legend'
+                    >
+                        Player Number {/* Label text */}
+                    </FormLabel>
+                    <RadioGroup
+                        aria-label='player-num'
+                        name='player-num'
+                        value={props.options}
+                        onChange={e => props.setOptions(e.target.value)}
+                    >
                         <FormControlLabel
                             control={<Radio/>}
                             label='Option 1'
@@ -111,4 +161,4 @@ export default (props) => { // Props are properties and these are passed into co
             </Menu>
         </div>
     );
-}
+};
