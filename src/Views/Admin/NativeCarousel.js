@@ -3,12 +3,10 @@ import {makeStyles, MobileStepper} from "@material-ui/core";
 import {Theme} from "../../Components/Theme";
 import clsx from "clsx";
 import SwipeableViews from 'react-swipeable-views';
-import {autoPlay} from 'react-swipeable-views-utils';
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
 import Button from "@material-ui/core/Button";
 import {NativeQuickView} from "../../Components/NativeQuickView";
 
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -19,9 +17,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'spaceAround',
         backgroundColor: theme.palette.primary.main,
     },
-    viewer: {
-
-    },
+    viewer: {},
     controls: {
         display: 'flex',
         flexDirection: 'row',
@@ -50,23 +46,23 @@ export default ({natives}) => {
         <div
             className={clsx(classes.root)}
         >
-            <AutoPlaySwipeableViews
+            <SwipeableViews
                 axis='x'
                 index={page}
                 onChangeIndex={handlePageChange}
                 enableMouseEvents
-                >
+            >
                 {natives ? natives.map((native, index) => (
                     <div key={native.id}>
                         {Math.abs(page - index) <= 2 ?
                             <NativeQuickView
                                 native={native}
                             />
-                        :
-                        null}
+                            :
+                            null}
                     </div>
                 )) : <div/>}
-            </AutoPlaySwipeableViews>
+            </SwipeableViews>
             <MobileStepper
                 steps={maxPages}
                 position='static'
@@ -83,7 +79,7 @@ export default ({natives}) => {
                         Prev
                         <KeyboardArrowLeft/>
                     </Button>}
-                />
+            />
         </div>
     )
 }

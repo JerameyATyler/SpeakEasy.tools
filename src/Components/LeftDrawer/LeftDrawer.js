@@ -17,6 +17,8 @@ import FlashCardIcon from '@material-ui/icons/CreditCard';
 import PopQuizIcon from '@material-ui/icons/SpeakerNotes';
 import T48Icon from '@material-ui/icons/GridOn';
 import UnoIcon from '@material-ui/icons/FlipCameraAndroid';
+import {faToolbox} from '@fortawesome/free-solid-svg-icons/faToolbox';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Theme} from "../Theme";
 import {NavLink} from "react-router-dom";
 
@@ -145,6 +147,15 @@ export default (props) => {
                     <ListItem button key={'Uno'}>
                         <ListItemIcon><UnoIcon className={clsx(classes.icon)}/></ListItemIcon>
                         <ListItemText primary='Uno' className={clsx(classes.icon)}/>
+                    </ListItem>
+                </NavLink>
+                <Divider/>
+                <NavLink to='/tools'
+                         activeClassName={clsx(classes.activeLink)}
+                >
+                    <ListItem button key={'Tools'}>
+                        <ListItemIcon><FontAwesomeIcon className={clsx(classes.icon)} icon={faToolbox}/></ListItemIcon>
+                        <ListItemText primary='Tools' className={clsx(classes.icon)}/>
                     </ListItem>
                 </NavLink>
             </List>

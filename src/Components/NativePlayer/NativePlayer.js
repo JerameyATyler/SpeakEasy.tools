@@ -1,7 +1,8 @@
-import React, {Fragment} from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from "@material-ui/core";
 import clsx from "clsx";
 import Play from '@material-ui/icons/PlayCircleFilled';
+import Stop from '@material-ui/icons/Stop';
 import {Theme} from "../Theme";
 import IconButton from "@material-ui/core/IconButton";
 import PitchFinder from 'pitchfinder';
@@ -21,35 +22,36 @@ export default ({native}) => {
     const classes = useStyles(Theme);
     const f0 = [];
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
+    const [playing, setPlaying] = useState(false);
     const arrayBuffer = audioContext.createBuffer(1, native.wav.data.length, native.wav.samplerate);
     const source = audioContext.createBufferSource();
     const wavArray = new Float32Array(native.wav.data);
 
-    const pitchDetector = new PitchFinder.YIN();
+    const pitchDetector = new PitchFinder.YIN({sampleRate: native.wav.samplerate});
     const pitchBufferSize = 512;
     for (let i = 0; i < wavArray.length; i += pitchBufferSize) {
         const pitch = pitchDetector(wavArray.slice(i, i + pitchBufferSize));
         f0.push({f0: pitch, t: i / native.wav.samplerate});
     }
 
-    arrayBuffer.copyToChannel(wavArray, 0, 0);
-
-    source.buffer = arrayBuffer;
-    source.connect(audioContext.destination);
-
     const handlePlay = () => {
+        arrayBuffer.copyToChannel(wavArray, 0, 0);
+
+        source.buffer = arrayBuffer;
+        source.connect(audioContext.destination);
+        setPlaying(true);
         source.start();
     };
 
     const handleStop = () => {
-        source.stop();
+        setPlaying(false);
+        if(source) source.stop();
     };
 
     return (
         <div className={clsx(classes.root)}>
-            <IconButton className={clsx(classes.root)} onClick={handlePlay}>
-                <Play className={clsx(classes.icon)}/>
+            <IconButton className={clsx(classes.root)} onClick={playing ? handleStop : handlePlay}>
+                {playing ? <Stop className={clsx(classes.icon)}/> : <Play className={clsx(classes.icon)}/>}
             </IconButton>
             <AreaChart
                 width={600}
@@ -68,10 +70,10 @@ export default ({native}) => {
                 <YAxis
                     dataKey='f0'
                     type='number'
-                    name='tone'
-                    unit='MHz'
+                    name='intonation'
+                    unit='Hz'
                     stroke={Theme.palette.secondary.main}
-                    domain={[17600, 17700]}
+                    domain={['dataMin + 1000', 'dataMax + 1000']}
                 />
                 {native.phonemes.phonemes.map((p, index) => {
                     const xmin = p.xmin / native.wav.samplerate;
@@ -79,12 +81,12 @@ export default ({native}) => {
                     const xmid = xmin + (xmax - xmin) / 2;
                     console.log(xmin, xmax);
                     return (
-                            <ReferenceLine
-                                key={index}
-                                x={xmid}
-                                strokeOpacity={0}
-                                label={p.text}
-                            />
+                        <ReferenceLine
+                            key={index}
+                            x={xmid}
+                            strokeOpacity={0}
+                            label={p.text}
+                        />
                     )
                 })
                 }

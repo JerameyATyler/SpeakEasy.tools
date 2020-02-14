@@ -7,3 +7,4 @@ export {PopQuiz} from './PopQuiz';
 export {Profile} from './Profile';
 export {ToneTrainer} from './ToneTrainer';
 export {Uno} from './Uno';
+export {Tools} from './Tools';

@@ -2,9 +2,7 @@ import React from 'react';
 import {makeStyles} from "@material-ui/core";
 import {Theme} from "../Theme";
 import clsx from "clsx";
-import Typography from "@material-ui/core/Typography";
 import {NativePlayer} from "../NativePlayer";
-import {CartesianGrid, Line, LineChart, XAxis, YAxis} from "recharts";
 
 const useStyles = makeStyles(theme => ({
     root: {

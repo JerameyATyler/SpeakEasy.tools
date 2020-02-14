@@ -10,7 +10,8 @@ import {
     PopQuiz,
     Profile,
     ToneTrainer,
-    Uno
+    Uno,
+    Tools
 } from "../Views";
 
 const routes = [
@@ -24,6 +25,7 @@ const routes = [
     {path: '/2048', name: '2048', component: TwentyFortyEight},
     {path: '/toneTrainer', name: 'Tone Trainer', component: ToneTrainer},
     {path: '/uno', name: 'Uno', component: Uno},
+    {path: '/tools', name: 'Tools', component: Tools}
 ];
 
 export const MakeRoutes = routes.map((route, index) => {

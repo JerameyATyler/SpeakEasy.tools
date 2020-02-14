@@ -8,3 +8,5 @@ export {InstructionsPanel} from './InstructionsPanel';
 export {ConfigBar} from './ConfigBar';
 export {LeftDrawer} from './LeftDrawer';
 export {NativeQuickView} from './NativeQuickView';
+export {GraphCarousel} from './GraphCarousel';
+export {VoiceRecorder} from './VoiceRecorder';

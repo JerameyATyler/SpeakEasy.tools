@@ -1,6 +1,5 @@
 import React from "react";
 import {useApolloClient} from "@apollo/react-hooks";
-import Button from "@material-ui/core/Button";
 import gql from "graphql-tag";
 import {Theme} from "../../Components/Theme";
 import RecordVoiceOverIcon from "@material-ui/icons/RecordVoiceOver";
@@ -28,18 +27,18 @@ export default (props) => {
     return (
         <>
             <IconButton
-            style={{color: Theme.palette.secondary.contrastText}}
-            onClick={async () => {
-                const {data} = await client.query({
-                    query: GET_NATIVE_EXAMPLES,
-                    variables: {graphemes: graphemes},
-                });
-                props.setNatives(data.corpus);
-                props.setOpen(true);
-            }}
-        >
-            <RecordVoiceOverIcon/>
-        </IconButton>
+                style={{color: Theme.palette.secondary.contrastText}}
+                onClick={async () => {
+                    const {data} = await client.query({
+                        query: GET_NATIVE_EXAMPLES,
+                        variables: {graphemes: graphemes},
+                    });
+                    props.setNatives(data.corpus);
+                    props.setOpen(true);
+                }}
+            >
+                <RecordVoiceOverIcon/>
+            </IconButton>
         </>
     );
 };

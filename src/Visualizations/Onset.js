@@ -3,9 +3,9 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Theme} from "../Components/Theme";
 import IconButton from "@material-ui/core/IconButton";
 import {RecordVoiceOverOutlined} from "@material-ui/icons";
-import {Area, AreaChart, CartesianGrid, Label, XAxis, YAxis} from "recharts";
+import {Area, AreaChart, CartesianGrid, Label, ReferenceLine, XAxis, YAxis} from "recharts";
 import clsx from "clsx";
-import {F0} from "../Components/FeatureExtraction";
+import {Energy} from "../Components/FeatureExtraction";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -35,16 +35,13 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
     const classes = useStyles(Theme);
-    const [running, setRunning, f0] = F0();
+    const [running, setRunning, energy] = Energy();
 
     const toggleRunning = () => setRunning(prevState => !prevState);
 
     const formatData = d => {
-        return {
-            name: 'f0',
-            f0: d.f0 !== null ? Math.round((d.f0 + Number.EPSILON) * 100) / 100: null,
-            t: Math.round((d.t + Number.EPSILON) * 100) / 100,
-        };
+        const d_filtered = d.energy > 0.1 ? Math.round((d.energy + Number.EPSILON) * 100) / 100 : 0;
+        return {name: 'energy', energy: d_filtered, t: Math.round((d.t + Number.EPSILON) * 100) / 100};
     };
 
     return (
@@ -63,10 +60,10 @@ export default () => {
                     width={730}
                     height={250}
                     margin={{top: 15, right: 30, left: 20, bottom: 5}}
-                    data={f0? f0.map(e => formatData(e)): [formatData({f0: 0, t: 0})]}
+                    data={energy ? energy.map(e => formatData(e)) : [formatData({energy: 0, t: 0})]}
                 >
                     <defs>
-                        <linearGradient id='f0' x1='0' y1='0' x2='0' y2='1'>
+                        <linearGradient id='energy' x1='0' y1='0' x2='0' y2='1'>
                             <stop offset='5%' stopColor={Theme.palette.secondary.contrastText} stopOpacity={0.8}/>
                             <stop offset='95%' stopColor={Theme.palette.secondary.contrastText} stopOpacity={0}/>
                         </linearGradient>
@@ -86,22 +83,33 @@ export default () => {
                     </XAxis>
                     <YAxis
                         type='number'
-                        dataKey='f0'
+                        dataKey='energy'
                         stroke={Theme.palette.primary.contrastText}
                     >
                         <Label
-                            value='f0(Hz)'
+                            value='Energy'
                             offset={-20}
                             position='insideLeft'
                             fill={Theme.palette.primary.contrastText}/>
                     </YAxis>
                     <Area
-                        dataKey='f0'
+                        dataKey='energy'
                         type='monotone'
                         stroke={Theme.palette.primary.contrastText}
                         fillOpacity={1}
-                        fill='url(#f0)'
+                        fill='url(#energy)'
                     />
+                    {energy && energy.map(e => {
+                        const formatted = formatData(e);
+                        if (formatted.energy > 0) {
+                            return <ReferenceLine
+                                key={formatted.t}
+                                x={formatted.t}
+                                stroke={Theme.palette.primary.contrastText}
+                                strokeDasharray='3 6'
+                            />
+                        }
+                        return <></>;
                     })}
                 </AreaChart>
             </div>
