@@ -29,13 +29,13 @@ export default () => {
             const bufferInSeconds = 1 / Math.ceil(audioContext.sampleRate / bufferLength);
 
             let reqId;
-
+            const PitchDetector = new PitchFinder.YIN({sampleRate: audioContext.sampleRate});
             function analyse() {
                 reqId = requestAnimationFrame(analyse);
-                const PitchDetector = new PitchFinder.YIN({sampleRate: audioContext.sampleRate});
+
                 newAnalyser.getFloatTimeDomainData(dataArray);
                 let pitch = PitchDetector(dataArray);
-                if (pitch !== null) pitch = Math.round((PitchDetector(dataArray) + Number.EPSILON) * 100) / 10000;
+
                 setF0(prevState => {
                     const newState = {
                         f0: pitch,

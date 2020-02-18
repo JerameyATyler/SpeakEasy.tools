@@ -12,6 +12,8 @@ import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
 import gql from 'graphql-tag';
 import {useMutation} from "@apollo/react-hooks";
 import {useAuth0} from "../../react-auth0-spa";
+import Typography from "@material-ui/core/Typography";
+import UploadFile from "./UploadFile";
 
 
 const AddRow = () => {
@@ -54,7 +56,9 @@ const AddRow = () => {
 
     const [insertLessonMutation] = useMutation(INSERT_LESSON,
         {
-            onCompleted(){window.location.reload();}
+            onCompleted() {
+                window.location.reload();
+            }
         });
 
     const insertLesson = e => {
@@ -110,12 +114,14 @@ const AddRow = () => {
                     color: Theme.palette.secondary.contrastText
                 }}
             >{
-                add &&
+                add ?
                 <IconButton
                     style={{color: Theme.palette.secondary.contrastText}}
                 >
                     <RecordVoiceOverIcon/>
                 </IconButton>
+                    :
+                    <UploadFile/>
             }
             </TableCell>
             <TableCell
@@ -125,19 +131,27 @@ const AddRow = () => {
                 }}
             >{
                 add ?
-                <IconButton
-                    style={{color: Theme.palette.secondary.contrastText}}
-                    onClick={insertLesson}
-                >
-                    <Check/>
-                </IconButton>
-                    :
                     <IconButton
-                    style={{color: Theme.palette.secondary.contrastText}}
-                onClick={() => setAdd(true)}
-                >
-                <AddBox/>
-                </IconButton>
+                        style={{color: Theme.palette.secondary.contrastText}}
+                        onClick={insertLesson}
+                    >
+                        <Check/>
+                    </IconButton>
+                    :
+                    <div>
+                        <IconButton
+                            style={{color: Theme.palette.secondary.contrastText}}
+                            onClick={() => setAdd(true)}
+                        >
+                            <AddBox/>
+                        </IconButton>
+                        <Typography
+                            variant='subtitle1'
+                            style={{color: Theme.palette.secondary.contrastText}}
+                            >
+                            Add Row
+                        </Typography>
+                    </div>
             }
             </TableCell>
             <TableCell
@@ -147,22 +161,22 @@ const AddRow = () => {
                 }}
             >{
                 add &&
-                    <IconButton
-                        style={{color: Theme.palette.secondary.contrastText}}
-                        onClick={() => {
-                            setstate({
-                                chinese: null,
-                                pinyin: null,
-                                english: null,
-                                synonyms: null,
-                                tone: null,
-                                audio: null,
-                            });
-                            setAdd(false);
-                        }}
-                    >
-                        <Cancel/>
-                    </IconButton>
+                <IconButton
+                    style={{color: Theme.palette.secondary.contrastText}}
+                    onClick={() => {
+                        setstate({
+                            chinese: null,
+                            pinyin: null,
+                            english: null,
+                            synonyms: null,
+                            tone: null,
+                            audio: null,
+                        });
+                        setAdd(false);
+                    }}
+                >
+                    <Cancel/>
+                </IconButton>
             }
             </TableCell>
         </TableRow>

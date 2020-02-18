@@ -39,7 +39,8 @@
     "react-swipeable-views-utils": "^0.13.7",
     "recharts": "^2.0.0-beta.1",
     "uuid": "latest",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "papaparse": "latest"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "^3.1.2",

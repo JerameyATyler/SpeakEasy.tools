@@ -1,49 +1,45 @@
 import React from "react";
 import {Theme} from "../Components/Theme";
 import clsx from "clsx";
-import {Energy, F0FromBuffer} from "../Components/FeatureExtraction";
-import {MinMaxScale} from "../Components/SignalProcessing";
 import {Area, AreaChart, Label, Legend, ReferenceArea, ReferenceLine, Text, XAxis, YAxis} from "recharts";
 import {makeStyles} from "@material-ui/core";
 import uuid from 'uuid/v4';
-import {AudioPlayer} from "../Components/AudioPlayer";
-import IconButton from "@material-ui/core/IconButton";
-import HearIcon from '@material-ui/icons/Hearing';
-import SpeakIcon from '@material-ui/icons/RecordVoiceOver';
-import {faDice} from '@fortawesome/free-solid-svg-icons/faDice';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Typography from "@material-ui/core/Typography";
-import RealTimeF0Trimmed from "../Components/FeatureExtraction/RealTimeF0Trimmed";
 
 const useStyles = makeStyles(theme => ({
-    root: {},
-    buttonBar: {
-        display: 'flex',
+    root: {
         flexGrow: 1,
-        justifyContent: 'center'
-    },
-    pad: {
-        flexGrow: -1,
-        margin: theme.spacing(2),
         display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center'
     },
     icon: {
-        width: 50,
-        height: 50,
+        color: theme.palette.primary.contrastText
     },
-    faIcon: {
-        fontSize: 38,
+    studentIcon: {
+        color: theme.palette.error.main,
     },
-    listening: {
-        backgroundColor: theme.palette.error.main,
-        color: theme.palette.error.contrastText,
+    nativeIcon: {
+        color: theme.palette.accent.main,
     },
-    notListening: {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
-    }
+    row: {
+        display: 'flex',
+        justifyContent: 'spaceAround',
+        alignItems: 'center',
+        padding: theme.spacing(1),
+    },
+    pad: {
+        padding: theme.spacing(1),
+        margin: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+    recording: {
+        color: theme.palette.accent.main,
+        backgroundColor: theme.palette.error.main
+    },
 }));
 /*  The component accepts a speech signal as it would come from a graphQL query to corpus. The JSON object should
  *  take the form below:
@@ -64,125 +60,16 @@ const useStyles = makeStyles(theme => ({
  *      pinyin: the Pinyin translation of the word
  *          }
  */
-export default ({s}) => {
+export default ({t1, t2, p1, progress1, progress2}) => {
     const classes = useStyles(Theme);
-    const [f0, t] = F0FromBuffer({buffer: s.wav, sampleRate: s.sampleRate});
-
-    const tmin = Math.min(...t);
-    const tmax = Math.max(...t);
-
-    const f0Scaled = MinMaxScale({s: f0});
-
-
-    for (let i = 0; i < s.phonemes.length; i++) {
-        let si = s.phonemes[i];
-        t.push(si.xmin / s.sampleRate);
-        t.push(si.xmax / s.sampleRate);
-    }
-
-    let tTemp = MinMaxScale({s: t});
-    let phonemeTimes = 2 * s.phonemes.length;
-
-    const tScaled = tTemp.slice(0, tTemp.length - phonemeTimes);
-    const pScaled = tTemp.slice(tTemp.length - phonemeTimes);
-    const phonemes = [];
-
-    for (let i = 0; i < pScaled.length; i += 2) {
-
-        phonemes.push({xmin: pScaled[i], xmax: pScaled[i + 1], text: s.phonemes[Math.floor(i / 2)].text});
-    }
-
-    const [play, progress] = AudioPlayer(s);
-
-
-    const scaleProgress = (p) => {
-        const scale = 1 / (tmax - tmin);
-        return (scale * p) - (tmin * scale);
-    };
-
-    const formattedData = [];
-    for (let i = 0; i < f0Scaled.length; i++) {
-        formattedData.push({'native': f0Scaled[i], 't': tScaled[i]})
-    }
-
-    const [running, setRunning, f02] = RealTimeF0Trimmed();
-
-    const f02Min = Math.min(...f02);
-    const f02Max = Math.max(...f02);
-    const scaleF02 = (f) =>{
-        const scale = 1 / (f02Max - f02Min);
-        return (scale * f) - (f02Min * scale);
-    };
-    const f02Scaled = f02.map(f => scaleF02(f));
-
-    const t2 = [...Array(f02.length).fill(0).map((i, index) => index)];
-    const scaleT2 = (t) => {
-        const scale = 1 / (f02Scaled.length - 1);
-        return t * scale;
-    };
-    const t2Scaled = t2.map(t => scaleT2(t));
-
-    const toggleRunning = () => setRunning(prevState => !prevState);
-
-    const formattedData2 = [];
-    for(let i = 0; i < f02Scaled.length; i++){
-        formattedData2.push({'student': f02Scaled[i], 't': t2Scaled[i]});
-    }
 
     return (
         <div className={clsx(classes.root)}>
-            <div className={clsx(classes.buttonBar)}>
-                <div className={clsx(classes.pad)}>
-                    <Typography
-                        variant='h6'
-                        color='secondary'
-                    >
-                        Hear
-                    </Typography>
-                    <IconButton
-                        color='secondary'
-                        onClick={play}
-                    >
-                        <HearIcon className={clsx(classes.icon)}/>
-                    </IconButton>
-                </div>
-                <div className={clsx(classes.pad)}>
-                    <Typography
-                        variant='h6'
-                        color='secondary'
-                    >
-                        Speak
-                    </Typography>
-                    <IconButton
-                        color='secondary'
-                        onClick={toggleRunning}
-                        className={clsx(classes.icon, {
-                            [classes.listening]: running,
-                            [classes.notListening]: !running,
-                        })}
-                    >
-                        <SpeakIcon className={clsx(classes.icon)}/>
-                    </IconButton>
-                </div>
-                <div className={clsx(classes.pad)}>
-                    <Typography
-                        variant='h6'
-                        color='secondary'
-                    >
-                        Exchange
-                    </Typography>
-                    <IconButton
-                        color='secondary'
-                    >
-                        <FontAwesomeIcon className={clsx(classes.faIcon)} icon={faDice}/>
-                    </IconButton>
-                </div>
-            </div>
             <AreaChart
                 width={1100}
                 height={500}
                 margin={{top: 50, right: 30, left: 120, bottom: 30}}
-                data={formattedData.concat(formattedData2)}
+                data={t2.length > 1 ? t1.concat(t2): t1}
             >
                 <defs>
                     <linearGradient id='native' x1='0' y1='0' x2='0' y2='1'>
@@ -194,25 +81,27 @@ export default ({s}) => {
                         <stop offset='95%' stopColor={Theme.palette.error.main} stopOpacity={0.2}/>
                     </linearGradient>
                 </defs>
-                <Legend verticalAlign='top' height={36}/>
+                <Legend
+                    verticalAlign='top'
+                    align='right'
+                    iconSize={28}
+                    iconType='line'
+                    formatter={(value, entry) => <span
+                        style={{color: Theme.palette.primary.contrastText, fontSize: 18}}>{value}</span>}
+                    height={36}
+                    fill={Theme.palette.primary.contrastText}
+                />
                 <XAxis
                     type='number'
                     dataKey='t'
                     stroke={Theme.palette.primary.contrastText}
-                    domain={['dataMin', 'dataMax']}
+                    domain={[0, 1]}
                 >
                     <Label
                         value='Time => [0, 1]'
                         offset={-5}
                         position='insideBottom'
                         fontSize='18'
-                        fill={Theme.palette.primary.contrastText}
-                    />
-                    <Label
-                        value={s.graphemes}
-                        position='top'
-                        offset={400}
-                        fontSize='36'
                         fill={Theme.palette.primary.contrastText}
                     />
                 </XAxis>
@@ -242,7 +131,14 @@ export default ({s}) => {
                     fillOpacity={1}
                     fill='url(#native)'
                 />
-                {phonemes.map(p =>
+                <Area
+                    dataKey='student'
+                    type='monotone'
+                    stroke={Theme.palette.error.main}
+                    fillOpacity={1}
+                    fill='url(#student)'
+                />
+                {p1 && p1.map(p =>
                     <ReferenceArea
                         key={uuid()}
                         x1={p.xmin}
@@ -250,29 +146,33 @@ export default ({s}) => {
                         y1={1}
                         y2={1.25}
                         fill='url(#native)'
-                        label={{fontSize: 24, value: p.text, fill: Theme.palette.primary.contrastText}}
-                        ifOverflow='extendDomain'
-                    />
-                )}
-                {pScaled.map(p =>
+                        fillOpacity={1}
+                        stroke={Theme.palette.accent.main}
+                        label={{value: p.text, fill: Theme.palette.primary.contrastText}}
+                    />)}
+                {p1 && p1.map(p =>
                     <ReferenceLine
                         key={uuid()}
-                        x={p}
+                        x={p.xmin}
                         stroke={Theme.palette.accent.main}
-                        strokeDasharray='3 3'
+                        strokeWidth={3}
+                        strokeDasharray='6 6'
+                    />
+                )}
+                {p1 && p1.map(p =>
+                    <ReferenceLine
+                        key={uuid()}
+                        x={p.xmax}
+                        stroke={Theme.palette.accent.main}
+                        strokeWidth={3}
+                        strokeDasharray='6 6'
                     />
                 )}
                 <ReferenceLine
-                    x={scaleProgress(progress)}
+                    x={progress1}
                     stroke={Theme.palette.accent.main}
                     strokeWidth={3}
-                />
-                <Area
-                    dataKey='student'
-                    type='monotone'
-                    stroke={Theme.palette.error.main}
-                    fillOpacity={1}
-                    fill='url(#student)'
+                    strokeDasharray='6 6'
                 />
             </AreaChart>
         </div>

@@ -15,6 +15,7 @@ export default ({page}) => {
 
     const {loading, error, data} = useQuery(GET_LESSONS_BY_PAGE, {
         variables: {limit: 5, offset: page},
+        fetchPolicy: "cache-and-network"
     });
 
     if (loading || error) return;

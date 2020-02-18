@@ -6,39 +6,48 @@ export default () => {
     const [analyzer, setAnalyzer] = useState(null);
     const [running, setRunning] = useState(false);
     const [energy, setEnergy] = useState([]);
+    const [buffer, setBuffer] = useState([]);
+    const [bufferSize, setBufferSize] = useState(null);
+    const [sampleRate, setSampleRate] = useState(null);
+    const [onset, setOnset] = useState(null);
+    const [offset, setOffset] = useState(null);
+    const [returnBuffer, setReturnBuffer] = useState([]);
+    const [returnEnergy, setReturnEnergy] = useState([]);
 
     useEffect(() => {
         const audioContext = new AudioContext();
 
         let newAnalyzer;
-
         MediaStream({audio: true, video: false}).then(stream => {
             if (audioContext.state === 'closed') {
                 return;
             }
+            const inputBufferSize = Math.pow(2, Math.ceil(Math.log2((2 / 85) * audioContext.sampleRate)));
+            const bufferInSeconds = inputBufferSize / audioContext.sampleRate;
 
-            const inputBufferSize = 1024;
-            const outputBufferSize = 2 * Math.ceil(audioContext.sampleRate / inputBufferSize); // Heuristically set to 2 seconds
-            const bufferInSeconds = 1 / Math.ceil(audioContext.sampleRate / inputBufferSize);
-
+            setBufferSize(inputBufferSize);
+            setSampleRate(audioContext.sampleRate);
+            let time = 0;
             const source = audioContext.createMediaStreamSource(stream);
-
             newAnalyzer = Meyda.createMeydaAnalyzer({
                 bufferSize: inputBufferSize,
                 audioContext: audioContext,
                 source: source,
-                featureExtractors: ['energy'],
+                featureExtractors: ['energy', 'buffer'],
                 callback: features => {
-                    setEnergy(prevState => {
-                        const newState = {
-                            energy: features.energy,
-                            t: prevState.length > 0? prevState[prevState.length - 1].t + bufferInSeconds: 0
-                        };
-                        return [...prevState, newState]
-                            .slice(Math.max(prevState.length - outputBufferSize, 0))});
+                    time += bufferInSeconds;
+                    if (features.energy >= 0.5) {
+                        setOnset(prevState => prevState === null ? time : prevState);
+                        setOffset(time);
+                        setEnergy(prevState => [...prevState, features.energy]);
+                    } else {
+                        setEnergy(prevState => [...prevState, 0]);
+                    }
+                    setBuffer(prevState => [...prevState, ...features.buffer]);
                 },
             });
             setAnalyzer(newAnalyzer);
+
         });
 
         return () => {
@@ -49,7 +58,7 @@ export default () => {
                 audioContext.close();
             }
         }
-    }, []);
+    });
 
     useEffect(() => {
         if (analyzer) {
@@ -57,10 +66,22 @@ export default () => {
                 analyzer.start();
             } else {
                 analyzer.stop();
+                if (!running && buffer.length > 1) {
+                    setReturnBuffer(buffer.slice(
+                        Math.floor(onset * sampleRate) - bufferSize,
+                        Math.ceil(offset * sampleRate) + bufferSize));
+                    setReturnEnergy(energy.slice(Math.floor(onset * (sampleRate / bufferSize)) - 1, Math.ceil(offset * (sampleRate / bufferSize)) + 1));
+                }
             }
         } else {
             setRunning(false);
         }
     }, [running, analyzer]);
-    return [running, setRunning, energy];
+    return [
+        running,
+        setRunning,
+        returnEnergy,
+        returnBuffer,
+        sampleRate
+    ];
 };
