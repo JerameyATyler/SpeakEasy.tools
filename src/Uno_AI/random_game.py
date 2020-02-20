@@ -1,7 +1,7 @@
 from uno import UnoGame, COLORS
 import random
 
-players = random.randint(2, 15)
+players = random.randint(3, 10)
 game = UnoGame(players)
 
 print("Starting a {} player game".format(players))
