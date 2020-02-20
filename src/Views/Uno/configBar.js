@@ -45,27 +45,24 @@ export default (props) => { // Props are properties and these are passed into co
     // carefully.
     */
     const [anchorE1, setAnchorE1] = useState(null);
-    const [anchorE2, setAnchorE2] = useState(null);
+    const [anchorE1_2, setAnchorE1_2] = useState(null);
     // This handles what happens when the user clicks the menu button
     const handleE1Click = event => {
         // Set the menu's anchor to the spot where the user clicked
         setAnchorE1(event.currentTarget);
     };
-
-    const handleE2Click = event => {
-        // Set the menu's anchor to the spot where the user clicked
-        setAnchorE2(event.currentTarget);
-    };
-
     // This handles what happens when the menu closes
     const handleE1Close = () => {
         // We set the anchor to null so that the menu can close
         setAnchorE1(null);
     };
-
+    const handleE2Click = event => {
+        // Set the menu's anchor to the spot where the user clicked
+        setAnchorE1_2(event.currentTarget);
+    };
     const handleE2Close = () => {
         // We set the anchor to null so that the menu can close
-        setAnchorE2(null);
+        setAnchorE1_2(null);
     };
 
     return (
@@ -77,7 +74,7 @@ export default (props) => { // Props are properties and these are passed into co
                 aria-haspopup='true'
                 onClick={handleE1Click}
                 >
-                My Menu {/* This is the actual text that is on the button */}
+                Language {/* This is the actual text that is on the button */}
             </Button>
             <Menu
                 id='mode'
@@ -94,7 +91,7 @@ export default (props) => { // Props are properties and these are passed into co
                         className={clsx(classes.formLabel)}
                         component='legend'
                     >
-                        Game Mode {/* Label text */}
+                        Language {/* Label text */}
                     </FormLabel>
                     <RadioGroup
                         aria-label='game-mode'
@@ -110,6 +107,7 @@ export default (props) => { // Props are properties and these are passed into co
                     </RadioGroup>
                 </FormControl>
             </Menu>
+
             <Button
                 variant='contained'
                 color='secondary'
@@ -121,9 +119,9 @@ export default (props) => { // Props are properties and these are passed into co
             </Button>
             <Menu
                 id='players'
-                anchorE2={anchorE2}
+                anchorE1={anchorE1_2}
                 keepMounted
-                open={Boolean(anchorE2)}
+                open={Boolean(anchorE1_2)}
                 onClose={handleE2Close}
             >
                 <FormControl
@@ -137,25 +135,15 @@ export default (props) => { // Props are properties and these are passed into co
                         Player Number {/* Label text */}
                     </FormLabel>
                     <RadioGroup
-                        aria-label='player-num'
-                        name='player-num'
+                        aria-label='game-mode'
+                        name='game-mode'
                         value={props.options}
                         onChange={e => props.setOptions(e.target.value)}
                     >
-                        <FormControlLabel
-                            control={<Radio/>}
-                            label='Option 1'
-                            value='Option 1'
-                        >
-                            <MenuItem/> {/* This shapes our form control label and radio button into a menu item */}
-                        </FormControlLabel>
-                        <FormControlLabel
-                            control={<Radio/>}
-                            label='Option 2'
-                            value='Option 2'
-                        >
-                            <MenuItem/>
-                        </FormControlLabel>
+                        <FormControlLabel value={'3'} control={<Radio/>} label='3'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'4'} control={<Radio/>} label='4'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'5'} control={<Radio/>} label='5'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'6'} control={<Radio/>} label='6'><MenuItem/></FormControlLabel>
                     </RadioGroup>
                 </FormControl>
             </Menu>
