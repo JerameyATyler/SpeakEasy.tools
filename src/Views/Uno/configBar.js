@@ -46,6 +46,7 @@ export default (props) => { // Props are properties and these are passed into co
     */
     const [anchorE1, setAnchorE1] = useState(null);
     const [anchorE1_2, setAnchorE1_2] = useState(null);
+
     // This handles what happens when the user clicks the menu button
     const handleE1Click = event => {
         // Set the menu's anchor to the spot where the user clicked
@@ -119,7 +120,7 @@ export default (props) => { // Props are properties and these are passed into co
             </Button>
             <Menu
                 id='players'
-                anchorE1={anchorE1_2}
+                anchorEl={anchorE1_2}
                 keepMounted
                 open={Boolean(anchorE1_2)}
                 onClose={handleE2Close}
