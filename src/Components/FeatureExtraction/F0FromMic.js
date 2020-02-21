@@ -1,9 +1,16 @@
-import {Energy, F0FromBuffer} from "./index";
+import {useEffect} from "react";
+import {Energy, TrimBuffer, F0FromBuffer} from "./index";
+
+const energyThreshold = 0.5;
 
 export default () => {
-    const [running, setRunning, _, buffer, sampleRate] = Energy();
-    const s = {buffer: buffer, sampleRate: sampleRate, scaleAxes: true, wav: buffer};
-    const [f0, t] = F0FromBuffer(s);
+   const [recording, toggle, e, buffer, sampleRate] = Energy();
+   const bTrimmed = TrimBuffer({buffer: buffer, energy: e, energyThreshold: energyThreshold});
+   const [f0, t] = F0FromBuffer({buffer: bTrimmed, sampleRate: sampleRate, scaleAxes: true});
 
-    return [running, setRunning, buffer, sampleRate, f0, t];
+   useEffect(() => {
+      if(f0.length > 1)console.log(f0);
+   }, [f0]);
+
+   return [recording, toggle, f0, t];
 }

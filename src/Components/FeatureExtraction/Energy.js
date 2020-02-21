@@ -1,87 +1,68 @@
-import {useEffect, useState} from 'react';
-import {MediaStream} from "../MediaStream";
+import GetMediaStream from "../MediaStream/GetMediaStream";
 import Meyda from 'meyda';
+import {useEffect, useState} from "react";
+
+const streamConfig = {audio: true, video: false};
 
 export default () => {
+    const [stream, error] = GetMediaStream(streamConfig);
+    const [recording, setRecording] = useState(null);
     const [analyzer, setAnalyzer] = useState(null);
-    const [running, setRunning] = useState(false);
-    const [energy, setEnergy] = useState([]);
-    const [buffer, setBuffer] = useState([]);
-    const [bufferSize, setBufferSize] = useState(null);
+    const [outputEnergy, setOutputEnergy] = useState(null);
+    const [energy, setEnergy] = useState(null);
+    const [outputBuffer, setOutputBuffer] = useState(null);
+    const [buffer, setBuffer] = useState(null);
     const [sampleRate, setSampleRate] = useState(null);
-    const [onset, setOnset] = useState(null);
-    const [offset, setOffset] = useState(null);
-    const [returnBuffer, setReturnBuffer] = useState([]);
-    const [returnEnergy, setReturnEnergy] = useState([]);
+
+    const toggle = () => setRecording(prevState => prevState === null ? true : !prevState);
 
     useEffect(() => {
-        const audioContext = new AudioContext();
+        if(stream){
+            const context = new AudioContext();
+            const sr = context.sampleRate;
+            const inputBufferSize = 512;
 
-        let newAnalyzer;
-        MediaStream({audio: true, video: false}).then(stream => {
-            if (audioContext.state === 'closed') {
-                return;
-            }
-            const inputBufferSize = Math.pow(2, Math.ceil(Math.log2((2 / 85) * audioContext.sampleRate)));
-            const bufferInSeconds = inputBufferSize / audioContext.sampleRate;
-
-            setBufferSize(inputBufferSize);
-            setSampleRate(audioContext.sampleRate);
-            let time = 0;
-            const source = audioContext.createMediaStreamSource(stream);
-            newAnalyzer = Meyda.createMeydaAnalyzer({
+            let b = [];
+            let e = [];
+            const src = context.createMediaStreamSource(stream);
+            const meydaAnalyzer = Meyda.createMeydaAnalyzer({
                 bufferSize: inputBufferSize,
-                audioContext: audioContext,
-                source: source,
+                audioContext: context,
+                source: src,
                 featureExtractors: ['energy', 'buffer'],
                 callback: features => {
-                    time += bufferInSeconds;
-                    if (features.energy >= 0.5) {
-                        setOnset(prevState => prevState === null ? time : prevState);
-                        setOffset(time);
-                        setEnergy(prevState => [...prevState, features.energy]);
-                    } else {
-                        setEnergy(prevState => [...prevState, 0]);
-                    }
-                    setBuffer(prevState => [...prevState, ...features.buffer]);
+                    const ei = features.energy;
+                    const bi = features.buffer;
+                    e.push(ei);
+                    b.push(bi);
                 },
             });
-            setAnalyzer(newAnalyzer);
 
-        });
-
-        return () => {
-            if (newAnalyzer) {
-                newAnalyzer.stop();
-            }
-            if (audioContext) {
-                audioContext.close();
-            }
+            meydaAnalyzer.stop();
+            setAnalyzer(meydaAnalyzer);
+            setBuffer(b);
+            setEnergy(e);
+            setSampleRate(sr);
         }
-    });
+    }, [stream]);
+
+    const assignOutput = () => {
+        if(recording === false) {
+            setOutputBuffer(buffer);
+            setOutputEnergy(energy);
+        }
+    };
 
     useEffect(() => {
-        if (analyzer) {
-            if (running) {
-                analyzer.start();
-            } else {
-                analyzer.stop();
-                if (!running && buffer.length > 1) {
-                    setReturnBuffer(buffer.slice(
-                        Math.floor(onset * sampleRate) - bufferSize,
-                        Math.ceil(offset * sampleRate) + bufferSize));
-                    setReturnEnergy(energy.slice(Math.floor(onset * (sampleRate / bufferSize)) - 1, Math.ceil(offset * (sampleRate / bufferSize)) + 1));
-                }
-            }
-        } else {
-            setRunning(false);
+        if(recording && stream && analyzer) {
+            stream.getTracks().forEach(t => t.enabled = true);
+            analyzer.start();
+        } else if(recording === false && stream && analyzer) {
+            analyzer.stop();
+            stream.getTracks().forEach(t => t.enabled = false);
+            assignOutput();
         }
-    }, [running, analyzer]);
-    return [
-        running,
-        setRunning,
-        returnEnergy,
-        returnBuffer,
-        sampleRate
-    ];
+    }, [recording, stream, analyzer, assignOutput]);
+
+    return [recording, toggle, outputEnergy, outputBuffer, sampleRate];
 };

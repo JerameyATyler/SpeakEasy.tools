@@ -103,7 +103,8 @@ export default ({samples}) => {
                             sampleRate: s.sampleRate,
                             scaleAxes: true
                         });
-                        const [playNative, progressNative] = AudioPlayer({wav: s.wav, sampleRate: s.sampleRate});
+                        //const [readyNative, playingNative, playNative, progressNative] = AudioPlayer({wav: s.wav, sampleRate: s.sampleRate});
+                    const [readyNative, playingNative, playNative, progressNative] = [null, null, null, null];
                         const round = x => Math.round((x + Number.EPSILON) * 100) / 100;
                         const joinAxes = (x, y, label) => {
                             return x.map((xi, index) => {
@@ -117,17 +118,8 @@ export default ({samples}) => {
                             const scale = 1 / (pMax - pMin);
                             return (scale * p) - (pMin * scale);
                         };
+                        const [recordingStudent, toggleStudent, f0Student, tStudent] = F0FromMic();
 
-                        const [
-                            running,
-                            setRunning,
-                            buffer,
-                            sampleRate,
-                            f0Student,
-                            tStudent] = F0FromMic();
-
-                        const toggleRunning = () => setRunning(prevState => !prevState);
-                        const [playStudent, progressStudent] = AudioPlayer({wav: buffer, sampleRate: sampleRate});
                         return <div className={clsx(classes.content)} key={s.id}>
                             {Math.abs(page - index) <= 1 ?
                                 <>
@@ -156,6 +148,16 @@ export default ({samples}) => {
                                     </div>
                                     <div className={clsx(classes.row)}>
                                         <div className={clsx(classes.pad)}>
+                                            <Typography
+                                                variant='h2'
+                                                color='secondary'
+                                                >
+
+                                            </Typography>
+                                        </div>
+                                    </div>
+                                    <div className={clsx(classes.row)}>
+                                        <div className={clsx(classes.pad)}>
                                             <ToneGraph
                                                 t1={joinAxes(tNative, f0Native, 'native')}
                                                 t2={joinAxes(tStudent, f0Student, 'student')}
@@ -167,7 +169,7 @@ export default ({samples}) => {
                                                     }
                                                 })}
                                                 progress1={progressNative}
-                                                progress2={progressStudent}
+                                                //progress2={progressStudent}
                                             />
                                             <List aria-label='listen speak approve reject'>
                                                 <ListItem button onClick={handleClick}>
@@ -185,7 +187,7 @@ export default ({samples}) => {
                                                 >
                                                     <List aria-label='audio sample list'>
                                                         <ListItem button onClick={playNative}
-                                                                  className={clsx(classes.native)}>
+                                                                  className={clsx(classes.native)} disabled={!readyNative || playingNative}>
                                                             <ListItemIcon>
                                                                 <HearIcon/>
                                                             </ListItemIcon>
@@ -193,7 +195,6 @@ export default ({samples}) => {
                                                         </ListItem>
                                                         <ListItem
                                                             button
-                                                            onClick={playStudent}
                                                             className={clsx(classes.student)}>
                                                             <ListItemIcon>
                                                                 <HearIcon/>
@@ -202,8 +203,8 @@ export default ({samples}) => {
                                                         </ListItem>
                                                     </List>
                                                 </Menu>
-                                                <ListItem button onClick={toggleRunning}
-                                                          className={clsx(classes.menuItem, {[classes.recording]: running})}>
+                                                <ListItem button onClick={toggleStudent}
+                                                          className={clsx(classes.menuItem)}>
                                                     <ListItemIcon>
                                                         <SpeakIcon/>
                                                     </ListItemIcon>

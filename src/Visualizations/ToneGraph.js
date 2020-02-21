@@ -69,7 +69,7 @@ export default ({t1, t2, p1, progress1, progress2}) => {
                 width={1100}
                 height={500}
                 margin={{top: 50, right: 30, left: 120, bottom: 30}}
-                data={t2.length > 1 ? t1.concat(t2): t1}
+                data={t2 && t2.length > 1 ? t1.concat(t2): t1}
             >
                 <defs>
                     <linearGradient id='native' x1='0' y1='0' x2='0' y2='1'>

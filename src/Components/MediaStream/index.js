@@ -1,1 +1,1 @@
-export {default as MediaStream} from './MediaStream';
+export {default as MediaStream} from './GetMediaStream';
