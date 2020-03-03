@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 
 const PAGINATE_LESSONS = gql`
     query PaginateLessons($lessonLimit: Int!, $lessonOffset: Int!, $sampleLimit: Int!,$sampleOffset: Int!) {
-        lessons(limit: $lessonLimit, offset: $lessonOffset) {
+        lessons(limit: $lessonLimit, offset: $lessonOffset, order_by: {pinyin: asc}) {
             ChineseLessonAudio(limit: $sampleLimit, offset: $sampleOffset) {
                 id
                 graphemes                
@@ -27,7 +27,7 @@ const PAGINATE_LESSONS = gql`
     }
 `;
 
-export default ({lessonLimit = 5, lessonPage = 0, sampleLimit = 5, samplePage = 0}) => {
+export default ({lessonLimit = 5, lessonPage = 0, sampleLimit = 1, samplePage = 0}) => {
     const formatSample = (s) => {
         return {
             id: s.id,

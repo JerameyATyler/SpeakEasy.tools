@@ -1,7 +1,7 @@
 import React from "react";
 import {useApolloClient} from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import {Theme} from "../../Components/Theme";
+import {Theme} from "../Components/Theme";
 import RecordVoiceOverIcon from "@material-ui/icons/RecordVoiceOver";
 import IconButton from "@material-ui/core/IconButton";
 

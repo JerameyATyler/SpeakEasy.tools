@@ -1,42 +1,26 @@
-import React, {useState} from 'react';
-import {ListItemIcon, ListItemText, makeStyles, Menu, MobileStepper} from "@material-ui/core";
+import React, {useEffect, useState} from 'react';
+import {makeStyles, MobileStepper} from "@material-ui/core";
 import {Theme} from "../../Components/Theme";
 import clsx from "clsx";
 import SwipeableViews from 'react-swipeable-views';
-import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
+import {KeyboardArrowLeft, KeyboardArrowRight,} from "@material-ui/icons";
 import Button from "@material-ui/core/Button";
-import {F0FromBuffer, F0FromMic} from "../../Components/FeatureExtraction";
-import {ToneGraph} from "../../Visualizations";
-import {AudioPlayer} from "../../Components/AudioPlayer";
-import Typography from "@material-ui/core/Typography";
-import HearIcon from '@material-ui/icons/Hearing';
-import SpeakIcon from '@material-ui/icons/RecordVoiceOver';
-import ApproveIcon from '@material-ui/icons/Check';
-import RejectIcon from '@material-ui/icons/Clear';
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
+import {ToneTrainerComponent} from "../ToneTrainer";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.palette.accent.main,
         display: 'flex',
+        flexGrow: 1,
         flexDirection: 'column',
         justifyContent: 'center',
     },
-    row: {
-        flexGrow: 1,
-        width: '100%',
-        margin: 'auto',
+    slide: {
         display: 'flex',
+        flexGrow: 1,
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    content: {
-        flexGrow: 1,
-        width: '100%',
-        height: '100%',
-        margin: 'auto',
     },
     pad: {
         padding: theme.spacing(1),
@@ -45,46 +29,52 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'spaceAround'
     },
-    menuItem: {
-        color: theme.palette.primary.contrastText
-    },
-    recording: {
+    active: {
         backgroundColor: theme.palette.error.main,
-        color: theme.palette.accent.main,
     },
     native: {
-        backgroundColor: theme.palette.accent.main,
-        color: theme.palette.primary.contrastText,
+        borderLeft: `thick solid ${theme.palette.accent.main}`,
     },
     student: {
-        backgroundColor: theme.palette.error.main,
+        borderLeft: `thick solid ${theme.palette.error.main}`,
+    },
+    graph: {
+        margin: theme.spacing(0),
+        padding: theme.spacing(0),
+    },
+    toolbar: {
+        margin: theme.spacing(0),
+        padding: theme.spacing(0),
         color: theme.palette.primary.contrastText,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    icon: {
+        color: theme.palette.primary.contrastText
     }
 }));
 
 export default ({samples}) => {
     const classes = useStyles(Theme);
     const [page, setPage] = useState(0);
-    const maxPages = samples.length;
-    const [anchorE1, setAnchorE1] = useState(null);
+    const [maxPages, setMaxPages] = useState(0);
+
     const nextPage = () => {
         setPage(prevState => prevState + 1);
     };
-
     const prevPage = () => {
         setPage(prevState => prevState - 1);
     };
-
     const handlePageChange = newPage => {
         setPage(newPage);
     };
 
-    const handleClick = e => {
-        setAnchorE1(e.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorE1(null);
-    };
+    const [currentSample, setCurrentSample] = useState({wav: null, sampleRate: null});
+    useEffect(() => {
+        if (!samples) return;
+        const s = samples[page];
+        setCurrentSample(s);
+    }, [samples, page]);
 
     return (
         <div
@@ -95,143 +85,13 @@ export default ({samples}) => {
                 index={page}
                 onChangeIndex={handlePageChange}
                 enableMouseEvents
-                slideClassName={clsx(classes.slide)}
             >
-                {samples ? samples.map((s, index) => {
-                        const [f0Native, tNative] = F0FromBuffer({
-                            buffer: s.wav,
-                            sampleRate: s.sampleRate,
-                            scaleAxes: true
-                        });
-                        //const [readyNative, playingNative, playNative, progressNative] = AudioPlayer({wav: s.wav, sampleRate: s.sampleRate});
-                    const [readyNative, playingNative, playNative, progressNative] = [null, null, null, null];
-                        const round = x => Math.round((x + Number.EPSILON) * 100) / 100;
-                        const joinAxes = (x, y, label) => {
-                            return x.map((xi, index) => {
-                                return {t: round(xi), [label]: round(y[index])}
-                            });
-                        };
+                <div className={clsx(classes.slide)}>
+                    <ToneTrainerComponent
+                        sampleNative={currentSample}
 
-                        const pMin = Math.min(...s.phonemes.map(p => p.xmin));
-                        const pMax = Math.max(...s.phonemes.map(p => p.xmax));
-                        const scalePhoneme = p => {
-                            const scale = 1 / (pMax - pMin);
-                            return (scale * p) - (pMin * scale);
-                        };
-                        const [recordingStudent, toggleStudent, f0Student, tStudent] = F0FromMic();
-
-                        return <div className={clsx(classes.content)} key={s.id}>
-                            {Math.abs(page - index) <= 1 ?
-                                <>
-                                    <div className={clsx(classes.row)}>
-                                        <div className={clsx(classes.pad)}>
-                                            <Typography
-                                                variant='h6'
-                                                color='secondary'>
-                                                {s.graphemes}
-                                            </Typography>
-                                        </div>
-                                        <div className={clsx(classes.pad)}>
-                                            <Typography
-                                                variant='h4'
-                                                color='secondary'>
-                                                {s.pinyin}
-                                            </Typography>
-                                        </div>
-                                        <div className={clsx(classes.pad)}>
-                                            <Typography
-                                                variant='h6'
-                                                color='secondary'>
-                                                {s.english}
-                                            </Typography>
-                                        </div>
-                                    </div>
-                                    <div className={clsx(classes.row)}>
-                                        <div className={clsx(classes.pad)}>
-                                            <Typography
-                                                variant='h2'
-                                                color='secondary'
-                                                >
-
-                                            </Typography>
-                                        </div>
-                                    </div>
-                                    <div className={clsx(classes.row)}>
-                                        <div className={clsx(classes.pad)}>
-                                            <ToneGraph
-                                                t1={joinAxes(tNative, f0Native, 'native')}
-                                                t2={joinAxes(tStudent, f0Student, 'student')}
-                                                p1={s.phonemes.map(p => {
-                                                    return {
-                                                        xmin: round(scalePhoneme(p.xmin)),
-                                                        xmax: round(scalePhoneme(p.xmax)),
-                                                        text: p.text
-                                                    }
-                                                })}
-                                                progress1={progressNative}
-                                                //progress2={progressStudent}
-                                            />
-                                            <List aria-label='listen speak approve reject'>
-                                                <ListItem button onClick={handleClick}>
-                                                    <ListItemIcon>
-                                                        <HearIcon className={clsx(classes.menuItem)}/>
-                                                    </ListItemIcon>
-                                                    <ListItemText className={clsx(classes.menuItem)} primary='Listen'/>
-                                                </ListItem>
-                                                <Menu
-                                                    id='audio samples menu'
-                                                    anchorEl={anchorE1}
-                                                    keepMounted
-                                                    open={Boolean(anchorE1)}
-                                                    onClose={handleClose}
-                                                >
-                                                    <List aria-label='audio sample list'>
-                                                        <ListItem button onClick={playNative}
-                                                                  className={clsx(classes.native)} disabled={!readyNative || playingNative}>
-                                                            <ListItemIcon>
-                                                                <HearIcon/>
-                                                            </ListItemIcon>
-                                                            <ListItemText primary='Native Speaker'/>
-                                                        </ListItem>
-                                                        <ListItem
-                                                            button
-                                                            className={clsx(classes.student)}>
-                                                            <ListItemIcon>
-                                                                <HearIcon/>
-                                                            </ListItemIcon>
-                                                            <ListItemText primary='Your Attempt'/>
-                                                        </ListItem>
-                                                    </List>
-                                                </Menu>
-                                                <ListItem button onClick={toggleStudent}
-                                                          className={clsx(classes.menuItem)}>
-                                                    <ListItemIcon>
-                                                        <SpeakIcon/>
-                                                    </ListItemIcon>
-                                                    <ListItemText className={clsx(classes.menuItem)} primary='Speak'/>
-                                                </ListItem>
-                                                <ListItem button>
-                                                    <ListItemIcon>
-                                                        <ApproveIcon className={clsx(classes.menuItem)}/>
-                                                    </ListItemIcon>
-                                                    <ListItemText className={clsx(classes.menuItem)} primary='Approve'/>
-                                                </ListItem>
-                                                <ListItem button>
-                                                    <ListItemIcon>
-                                                        <RejectIcon className={clsx(classes.menuItem)}/>
-                                                    </ListItemIcon>
-                                                    <ListItemText className={clsx(classes.menuItem)} primary='Reject'/>
-                                                </ListItem>
-                                            </List>
-                                        </div>
-                                    </div>
-                                </>
-                                :
-                                null
-                            }
-                        </div>
-                    }
-                ) : null}
+                    />
+                </div>
             </SwipeableViews>
             <MobileStepper
                 steps={maxPages}

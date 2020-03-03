@@ -7,7 +7,7 @@ export default (streamConfig) => {
     useEffect(() => {
         navigator.mediaDevices.getUserMedia(streamConfig)
             .then(function (mediaStream) {
-                mediaStream.getTracks().forEach(t => t.enabled = false);
+                //mediaStream.getTracks().forEach(t => t.enabled = false);
                 setStream(mediaStream);
             })
             .catch(function (err) {

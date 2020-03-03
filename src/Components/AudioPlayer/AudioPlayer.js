@@ -1,16 +1,25 @@
 import {useEffect, useState} from "react";
 
-export default ({wav, sampleRate, debug = false}) => {
+export default (sample) => {
+    const [wav, setWav] = useState(null);
+    const [sampleRate, setSampleRate] = useState(null);
     const [ready, setReady] = useState(null);
     const [playing, setPlaying] = useState(false);
     const [started, setStarted] = useState(false);
-    const [progress, setProgress] = useState(null);
+    const [stopped, setStopped] = useState(null);
 
     const [audioContext, setAudioContext] = useState(null);
     const [source, setSource] = useState(null);
 
-    const [stopped, setStopped] = useState(null);
+    const [progress, setProgress] = useState(null);
+
     const toggle = () => setPlaying(prevState => !prevState);
+
+    useEffect(() => {
+        if(!(sample && sample.wav && sample.sampleRate)) return;
+        setWav(sample.wav);
+        setSampleRate(sample.sampleRate);
+    }, [sample]);
 
     useEffect(() => {
         if (wav && sampleRate) {
@@ -54,19 +63,19 @@ export default ({wav, sampleRate, debug = false}) => {
 
     useEffect(() => {
         if(started && source) {
-            source.start();
+            source.start(0);
         }
     }, [started, source]);
 
     useEffect(() => {
-        if(stopped){
+        if(stopped && source){
             source.stop(0);
             setPlaying(false);
             setStarted(false);
             setStopped(false);
             setReady(false);
         }
-    }, [stopped]);
+    }, [stopped, source]);
 
     return [ready, playing, toggle, progress];
 };

@@ -1,26 +1,25 @@
 import PitchFinder from "pitchfinder";
-import {MinMaxScale} from "../SignalProcessing";
+import {useEffect, useState} from "react";
 
-export default ({buffer, sampleRate, scaleAxes = false}) => {
-    const f0 = [];
-    const t = [];
+export default (buffer) => {
+    const [f0, setF0] = useState(null);
 
-    const wavArray = new Float32Array(buffer);
-    const bufferSize = Math.pow(2, Math.ceil(Math.log2((2 / 85) * sampleRate)));
-    const bufferInSeconds = bufferSize / sampleRate;
+    useEffect(() => {
+        if(!buffer) return;
 
-    const pitchDetector = new PitchFinder.YIN({sampleRate: sampleRate});
-    for (let i = 0; i < wavArray.length; i += bufferSize) {
-        const pitch = pitchDetector(wavArray.slice(i, i + bufferSize));
-        f0.push(pitch);
-        t.push(t.length > 0 ? t[t.length - 1] + bufferInSeconds : bufferInSeconds);
-    }
-
-    const fragmentLength = wavArray.length % bufferSize;
-    const pitch = pitchDetector(wavArray.slice(wavArray.length - fragmentLength));
-    f0.push(pitch);
-    t.push(t[t.length - 1] + (fragmentLength / sampleRate));
-
-    if (scaleAxes) return [MinMaxScale({s: f0}), MinMaxScale({s: t})];
-    return [f0, t];
+        const detectors = [
+            PitchFinder.YIN({sampleRate: buffer.sampleRate}),
+            //PitchFinder.AMDF({sampleRate: buffer.sampleRate}),
+            //PitchFinder.DynamicWavelet({sampleRate: buffer.sampleRate})
+        ];
+        const context = new AudioContext();
+        buffer.arrayBuffer()
+            .then(b => context.decodeAudioData(b)
+                .then(decoded => {
+                    const float32Array = decoded.getChannelData(0);
+                    const frequencies = PitchFinder.frequencies(detectors, float32Array);
+                    setF0(frequencies);
+                }));
+    }, [buffer]);
+    return f0;
 };
