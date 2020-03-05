@@ -1,48 +1,38 @@
-import React, {useEffect, useState} from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import {Theme} from "../../Components";
+import React, {useEffect, useState} from 'react';
+import {makeStyles,} from "@material-ui/core";
+import {Theme} from "../../Components/Theme";
 import clsx from "clsx";
-import {Cached, KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
-import IconButton from "@material-ui/core/IconButton";
-import uuid from 'uuid/v4';
 import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import {Cached, KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
 import {Corpus, LessonsPage} from "../../Queries";
+import uuid from "uuid/v4";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'spaceAround'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     row: {
-        flexGrow: 1,
-        width: '100%',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        flexDirection: 'row',
     },
     wordBar: {
-        flexGrow: 1,
-        width: '100%',
-        height: 60,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
     icon: {
-        backgroundColor: theme.palette.accent.main,
-        color: theme.palette.secondary.main,
+        color: theme.palette.primary.contrastText,
     },
     pad: {
-        flexGrow: 1,
         margin: theme.spacing(1),
         padding: theme.spacing(1),
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center'
     },
     typography: {
         fontSize: 24,
@@ -100,7 +90,7 @@ export default ({setSelectedSample, setSelectedLesson}) => {
     useEffect(() => {
         if(totalPages === null) return;
         setCountPages(totalPages);
-        }, [totalPages]);
+    }, [totalPages]);
 
     useEffect(() => {
         if(!currentLesson)return;
@@ -164,8 +154,8 @@ export default ({setSelectedSample, setSelectedLesson}) => {
                     </IconButton>
                     <Typography
                         variant='h6'
-                        color='primary'>
-                        Prev. Page
+                        color='secondary'>
+                        Prev.
                     </Typography>
                 </div>
                 <div className={clsx(classes.wordBar)}>
@@ -195,11 +185,6 @@ export default ({setSelectedSample, setSelectedLesson}) => {
                     )}
                 </div>
                 <div className={clsx(classes.pad)}>
-                    <Typography
-                        variant='h6'
-                        color='primary'>
-                        Next Page
-                    </Typography>
                     <IconButton
                         className={clsx(classes.icon)}
                         disabled={countPages <= currentPageIndex}
@@ -207,11 +192,20 @@ export default ({setSelectedSample, setSelectedLesson}) => {
                     >
                         <KeyboardArrowRight/>
                     </IconButton>
+                    <Typography
+                        variant='h6'
+                        color='secondary'>
+                        Next
+                    </Typography>
                 </div>
             </div>
-
             <div className={clsx(classes.row)}>
                 <div className={clsx(classes.pad)}>
+                    <Typography
+                        variant='h6'
+                        color='secondary'>
+                        Different
+                    </Typography>
                     <IconButton
                         className={clsx(classes.icon)}
                         onClick={() => handleSampleChange()}
@@ -221,12 +215,11 @@ export default ({setSelectedSample, setSelectedLesson}) => {
                     </IconButton>
                     <Typography
                         variant='h6'
-                        color='primary'>
-                        New example
+                        color='secondary'>
+                        example
                     </Typography>
                 </div>
-
             </div>
         </div>
     );
-};
+}

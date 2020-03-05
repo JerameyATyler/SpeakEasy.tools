@@ -19,9 +19,17 @@ import clsx from "clsx";
 
 const useStyles = makeStyles(theme => ({
     carousel: {
+        display: 'flex',
         width: '90%',
         height: '90%',
-        margin: 'auto'
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+    modal: {
+        display: 'flex',
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 }));
 
@@ -102,6 +110,7 @@ const Row = ({data}) => {
                 <Modal
                     open={open}
                     onClose={handleClose}
+                    className={clsx(classes.modal)}
                 >
                     <div className={clsx(classes.carousel)}>
                         {open && <SampleCarousel samples={data.samples}/>}

@@ -1,87 +1,26 @@
-import {useEffect, useState} from 'react';
-import {MediaStream} from "../MediaStream";
 import PitchFinder from "pitchfinder";
+import {useEffect, useState} from "react";
 
-export default () => {
-    const [analyser, setAnalyser] = useState(null);
-    const [running, setRunning] = useState(false);
-    const [f0, setF0] = useState([]);
-    const [buffer, setBuffer] = useState([]);
-    const [sampleRate, setSampleRate] = useState(null);
+export default (arrayBuffer, sampleRate) => {
+    const [f0, setF0] = useState(null);
 
     useEffect(() => {
-        const audioContext = new AudioContext();
-        setSampleRate(audioContext.sampleRate);
+        if(!(arrayBuffer && sampleRate)) return;
 
-        let newAnalyser;
-        MediaStream({audio: true, video: false}).then(stream => {
-            if (audioContext.state === 'closed') return;
-            const source = audioContext.createMediaStreamSource(stream);
+        const detector = PitchFinder.YIN({sampleRate: sampleRate});
+        const float32Array = new Float32Array(arrayBuffer);
+        const bufferSize = 512;
 
-            newAnalyser = audioContext.createAnalyser();
-            source.connect(newAnalyser);
-            newAnalyser.fftSize = 4096;
+        let p = [];
 
-            const bufferLength = newAnalyser.frequencyBinCount;
-            const dataArray = new Float32Array(bufferLength);
-
-            const outputBufferSize = 2 * Math.ceil(audioContext.sampleRate / bufferLength);
-            const bufferInSeconds = 1 / Math.ceil(audioContext.sampleRate / bufferLength);
-
-            let reqId;
-            const PitchDetector = new PitchFinder.YIN({sampleRate: audioContext.sampleRate});
-            function analyse() {
-                reqId = requestAnimationFrame(analyse);
-
-                newAnalyser.getFloatTimeDomainData(dataArray);
-                let pitch = PitchDetector(dataArray);
-
-                setF0(prevState => {
-                    const newState = {
-                        f0: pitch,
-                        t: prevState.length > 0 ? prevState[prevState.length - 1].t + bufferInSeconds : 0
-                    };
-                    return [...prevState, newState]
-                        .slice(Math.max(prevState.length - outputBufferSize, 0))
-                });
-
-                setBuffer(prevState => [...prevState, ...dataArray]
-                    .slice(Math.max(prevState.length - (2 * audioContext.sampleRate), 0))
-                );
-            }
-
-            analyse();
-
-            newAnalyser.start = () => {
-                setF0([]);
-                reqId = requestAnimationFrame(analyse)
-            };
-
-            newAnalyser.stop = () => cancelAnimationFrame(reqId);
-
-            setAnalyser(newAnalyser);
-        });
-
-        return () => {
-            if (newAnalyser) {
-                newAnalyser.stop();
-            }
-            if (audioContext) {
-                audioContext.close();
-            }
+        for(let i = 0; i < float32Array.length; i += bufferSize){
+            const fragment = float32Array.slice(i, Math.min(i + bufferSize, float32Array.length));
+            const pitch = detector(fragment);
+            p.push(pitch);
         }
-    }, []);
 
-    useEffect(() => {
-        if (analyser) {
-            if (running) {
-                analyser.start();
-            } else {
-                analyser.stop();
-            }
-        } else {
-            setRunning(false);
-        }
-    }, [running, analyser]);
-    return [running, setRunning, f0, buffer, sampleRate];
+        setF0(p);
+    }, [arrayBuffer, sampleRate]);
+
+    return f0;
 };

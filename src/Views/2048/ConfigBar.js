@@ -12,6 +12,14 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import clsx from "clsx";
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+        display: 'flex',
+        flexFlow: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+    },
     formControl: {
         margin: theme.spacing(3),
         backgroundColor: theme.palette.accent.light,
@@ -35,7 +43,7 @@ export default (props) => {
     };
 
     return (
-        <div>
+        <div className={clsx(classes.root)}>
             <Button
                 variant='contained'
                 color='secondary'

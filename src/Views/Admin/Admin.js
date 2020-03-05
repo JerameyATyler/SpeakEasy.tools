@@ -27,9 +27,9 @@ export const Admin = () => {
 
     // rowsPerPage = lessonLimit, page = lessonPage
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const samplePage = 0;
-    const samplesPerPage = 10;
+    const samplesPerPage = 1;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -59,7 +59,7 @@ export const Admin = () => {
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[5, 10, 25, 100]}
                 component='div'
                 count={totalLessons}
                 rowsPerPage={rowsPerPage}
