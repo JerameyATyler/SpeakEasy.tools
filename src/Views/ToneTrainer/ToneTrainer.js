@@ -3,9 +3,12 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {GameWrapper, Theme, WordPicker} from "../../Components";
 import clsx from "clsx";
 import {ToneTrainerComponent} from "./index";
+import {ConfigBar} from './index';
 
 const useStyles = makeStyles(theme => ({
-    root: {},
+    root: {
+
+    },
 }));
 
 export default () => {
@@ -20,13 +23,12 @@ export default () => {
 
     return (
         <GameWrapper>
-            <Fragment/>
+            <ConfigBar
+                setSelectedSample={setNativeSample}
+                setSelectedLesson={setLesson}
+            />
             <Fragment/>
             <div className={clsx(classes.root)}>
-                <WordPicker
-                    setSelectedSample={setNativeSample}
-                    setSelectedLesson={setLesson}
-                />
                 {nativeSample &&
                 <ToneTrainerComponent
                     sampleNative={nativeSample}

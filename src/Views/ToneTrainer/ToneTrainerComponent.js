@@ -16,27 +16,18 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        margin: theme.spacing(3),
         backgroundColor: theme.palette.primary.contrastText
     },
     row: {
         display: 'flex',
-        flexGrow: 1,
-        height: '100%',
         justifyContent: 'center',
-        alignItems: 'center',
-        padding: theme.spacing(1)
     },
     column: {
         display: 'flex',
+        flexGrow: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     graph: {
-        flexGrow: 1,
-        width: '100%',
-        height: 300,
     },
     list: {
         backgroundColor: theme.palette.primary.light,
@@ -52,16 +43,11 @@ const useStyles = makeStyles(theme => ({
     glow: {
         textShadow: `0px 0px 4px ${theme.palette.primary.contrastText}`,
     },
-    title: {
-        flexGrow: 1,
-        width: '100%',
-    },
     pad: {
         padding: theme.spacing(1),
-        margin: theme.spacing(1),
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'spaceAround'
+        justifyContent: 'center'
     }
 }));
 

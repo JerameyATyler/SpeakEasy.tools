@@ -11,14 +11,8 @@ import {Theme} from "../../Components";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        overflow: 'hidden',
-        flexGrow: 1,
     },
     gridList: {
-        width: 600,
-        height: 300,
         padding: theme.spacing(1),
     },
     gridListTile: {
@@ -264,9 +258,8 @@ export const TwentyFortyEight = () => {
         };
         if(mode === 'color') return '';
         if(mode === 'chaos') return values[tile][['chinese', 'pinyin', 'english'][Math.floor(Math.random() * 3)]];
-        if(mode === 'adaptive') return values[tile][['english', 'english','pinyin', 'pinyin','chinese']
-            [Math.floor(Math.min(
-                Math.random() * 5 * (score/Math.max(matches, 1)), 4))]];
+        if(mode === 'adaptive') return values[tile][['english', 'pinyin', 'chinese']
+            [Math.floor(Math.random() * Math.min(Math.log2(Math.log2(score)), 3))]];
         else return values[tile][mode];
     };
 
@@ -275,7 +268,7 @@ export const TwentyFortyEight = () => {
              tabIndex={1}
              autoFocus
         >
-            <GridList cellHeight={60} className={clsx(classes.gridList)} cols={4} justify='center'>
+            <GridList className={clsx(classes.gridList)} cols={4} justify='center'>
                 {squares.map((tile, index) => (
                     <GridListTile
                         key={index}
@@ -285,7 +278,6 @@ export const TwentyFortyEight = () => {
                         <Typography
                             className={'MuiTypography--heading'}
                             variant={'h2'}
-                            gutterBottom
                         >
                             {tile.value.toString() === '0' ? '' : getText(tile.value)}
                         </Typography>
@@ -302,6 +294,7 @@ export const TwentyFortyEight = () => {
                 setMode={setMode}
             />
             <Instructions/>
+
             <TwentyFortyEightComponent/>
         </GameWrapper>
     );
