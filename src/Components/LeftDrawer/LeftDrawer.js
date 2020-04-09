@@ -139,14 +139,14 @@ export default (props) => {
                         <ListItemText primary='2048' className={clsx(classes.icon)}/>
                     </ListItem>
                 </NavLink>
-                {/*<NavLink to='/uno'
+                <NavLink to='/uno'
                          activeClassName={clsx(classes.activeLink)}
                 >
                     <ListItem button key={'Uno'}>
                         <ListItemIcon><UnoIcon className={clsx(classes.icon)}/></ListItemIcon>
                         <ListItemText primary='Uno' className={clsx(classes.icon)}/>
                     </ListItem>
-                </NavLink>*/}
+                </NavLink>
                 <Divider/>
             </List>
         </Drawer>
