@@ -5,6 +5,7 @@ import {Theme} from "../../Components/Theme";
 import {GameWrapper} from "../../Components/GameWrapper";
 import ConfigBar from './configBar';
 import Instructions from './instructions';
+
 import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
@@ -204,6 +205,7 @@ const useStyles = makeStyles(theme => ({
         '&::after':{
             content: `"9"`,
         },
+
     },
 }));
 
@@ -275,6 +277,7 @@ export default () => {
             )
     };
 
+
     return (
         <GameWrapper>
             <ConfigBar
@@ -284,5 +287,5 @@ export default () => {
             <Instructions/>
             <UnoComponent/>
         </GameWrapper>
-    )
-}
+    );
+};

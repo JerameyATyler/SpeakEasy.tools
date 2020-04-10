@@ -45,17 +45,25 @@ export default (props) => { // Props are properties and these are passed into co
     // carefully.
     */
     const [anchorE1, setAnchorE1] = useState(null);
+    const [anchorE1_2, setAnchorE1_2] = useState(null);
 
     // This handles what happens when the user clicks the menu button
-    const handleClick = event => {
+    const handleE1Click = event => {
         // Set the menu's anchor to the spot where the user clicked
         setAnchorE1(event.currentTarget);
     };
-
     // This handles what happens when the menu closes
-    const handleClose = () => {
+    const handleE1Close = () => {
         // We set the anchor to null so that the menu can close
         setAnchorE1(null);
+    };
+    const handleE2Click = event => {
+        // Set the menu's anchor to the spot where the user clicked
+        setAnchorE1_2(event.currentTarget);
+    };
+    const handleE2Close = () => {
+        // We set the anchor to null so that the menu can close
+        setAnchorE1_2(null);
     };
 
     return (
@@ -63,18 +71,18 @@ export default (props) => { // Props are properties and these are passed into co
             <Button
                 variant='contained'
                 color='secondary'
-                aria-controls='my menu'
+                aria-controls='mode-menu'
                 aria-haspopup='true'
-                onClick={handleClick}
+                onClick={handleE1Click}
                 >
-                My Menu {/* This is the actual text that is on the button */}
+                Language {/* This is the actual text that is on the button */}
             </Button>
             <Menu
-                id='my_menu'
+                id='mode'
                 anchorEl={anchorE1}
                 keepMounted
                 open={Boolean(anchorE1)}
-                onClose={handleClose}
+                onClose={handleE1Close}
                 >
                 <FormControl
                     component='fieldset'
@@ -84,31 +92,66 @@ export default (props) => { // Props are properties and these are passed into co
                         className={clsx(classes.formLabel)}
                         component='legend'
                     >
-                        My Options {/* Label text */}
+                        Language {/* Label text */}
                     </FormLabel>
                     <RadioGroup
-                        aria-label='my-options'
-                        name='my-options'
+                        aria-label='game-mode'
+                        name='game-mode'
                         value={props.options}
                         onChange={e => props.setOptions(e.target.value)}
                         >
-                        <FormControlLabel
-                            control={<Radio/>}
-                            label='Option 1'
-                            value='Option 1'
-                        >
-                            <MenuItem/> {/* This shapes our form control label and radio button into a menu item */}
-                        </FormControlLabel>
-                        <FormControlLabel
-                            control={<Radio/>}
-                            label='Option 2'
-                            value='Option 2'
-                        >
-                            <MenuItem/>
-                        </FormControlLabel>
+                        <FormControlLabel value={'chinese'} control={<Radio/>} label='Chinese'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'pinyin'} control={<Radio/>} label='Pinyin'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'english'} control={<Radio/>} label='English'><MenuItem/></FormControlLabel>
+                    </RadioGroup>
+                </FormControl>
+            </Menu>
+
+            <Button
+                variant='contained'
+                color='secondary'
+                aria-controls='player-menu'
+                aria-haspopup='true'
+                onClick={handleE2Click}
+            >
+                Player Number {/* This is the actual text that is on the button */}
+            </Button>
+            <Menu
+                id='players'
+                anchorEl={anchorE1_2}
+                keepMounted
+                open={Boolean(anchorE1_2)}
+                onClose={handleE2Close}
+            >
+                <FormControl
+                    component='fieldset'
+                    className={clsx(classes.formControl)}
+                >
+                    <FormLabel
+                        className={clsx(classes.formLabel)}
+                        component='legend'
+                    >
+                        Player Number {/* Label text */}
+                    </FormLabel>
+                    <RadioGroup
+                        aria-label='game-mode'
+                        name='game-mode'
+                        value={props.options}
+                        onChange={e => props.setOptions(e.target.value)}
+                    >
+                        <FormControlLabel value={'1'} control={<Radio/>} label='1'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'2'} control={<Radio/>} label='2'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'3'} control={<Radio/>} label='3'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'4'} control={<Radio/>} label='4'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'5'} control={<Radio/>} label='5'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'6'} control={<Radio/>} label='6'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'7'} control={<Radio/>} label='7'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'8'} control={<Radio/>} label='8'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'9'} control={<Radio/>} label='9'><MenuItem/></FormControlLabel>
+
                     </RadioGroup>
                 </FormControl>
             </Menu>
         </div>
     );
-}
+};
