@@ -103,8 +103,6 @@ export default (props) => { // Props are properties and these are passed into co
                         <FormControlLabel value={'chinese'} control={<Radio/>} label='Chinese'><MenuItem/></FormControlLabel>
                         <FormControlLabel value={'pinyin'} control={<Radio/>} label='Pinyin'><MenuItem/></FormControlLabel>
                         <FormControlLabel value={'english'} control={<Radio/>} label='English'><MenuItem/></FormControlLabel>
-                        <FormControlLabel value={'adaptive'} control={<Radio/>} label='Adaptive'><MenuItem/></FormControlLabel>
-                        <FormControlLabel value={'chaos'} control={<Radio/>} label='Chaos'><MenuItem/></FormControlLabel>
                     </RadioGroup>
                 </FormControl>
             </Menu>
@@ -141,10 +139,16 @@ export default (props) => { // Props are properties and these are passed into co
                         value={props.options}
                         onChange={e => props.setOptions(e.target.value)}
                     >
+                        <FormControlLabel value={'1'} control={<Radio/>} label='1'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'2'} control={<Radio/>} label='2'><MenuItem/></FormControlLabel>
                         <FormControlLabel value={'3'} control={<Radio/>} label='3'><MenuItem/></FormControlLabel>
                         <FormControlLabel value={'4'} control={<Radio/>} label='4'><MenuItem/></FormControlLabel>
                         <FormControlLabel value={'5'} control={<Radio/>} label='5'><MenuItem/></FormControlLabel>
                         <FormControlLabel value={'6'} control={<Radio/>} label='6'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'7'} control={<Radio/>} label='7'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'8'} control={<Radio/>} label='8'><MenuItem/></FormControlLabel>
+                        <FormControlLabel value={'9'} control={<Radio/>} label='9'><MenuItem/></FormControlLabel>
+
                     </RadioGroup>
                 </FormControl>
             </Menu>

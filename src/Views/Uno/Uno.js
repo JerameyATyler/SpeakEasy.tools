@@ -5,10 +5,29 @@ import {Theme} from "../../Components/Theme";
 import {GameWrapper} from "../../Components/GameWrapper";
 import ConfigBar from './configBar';
 import Instructions from './instructions';
+import GridList from "@material-ui/core/GridList";
+import clsx from "clsx";
+import GridListTile from "@material-ui/core/GridListTile";
 
-const useStyles = makeStyles(theme => {
-    root: {}
-});
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        overflow: 'hidden',
+        flexGrow: 1,
+    },
+    gridList: {
+        width: 600,
+        height: 300,
+        padding: theme.spacing(1),
+    },
+    gridListTile: {
+        border: `thin ${theme.palette.secondary.main} solid`,
+        borderRadius: 10,
+        textAlign: 'center',
+        color: '#f5f2d0',
+    },
+}));
 
 export default () => {
     const classes = useStyles(Theme);
@@ -18,18 +37,21 @@ export default () => {
     // these get passed as props to config bar
     const [options, setOptions] = useState('Option 1');
 
-    const UnoComponent = () => {
-        // This is where the HTML for Uno will go. You can put some variables here, but not state variables
-        return (
-            <div>
-                <Typography
-                    variant='h2'
-                    color='primary'
+    const UnoComponent = () => (
+        <div className={classes.root}
+             tabIndex={1}
+             autofocus
+        >
+            <GridList cellHeight={60} className={clsx(classes.gridList)} cols={4} justify='center'>
+                <GridListTile
+                    key={1}
+                    className={"gridTile"}
+                    cols={1}
                 >
-                    Uno
-                </Typography>
-            </div>)
-    };
+                </GridListTile>
+            </GridList>
+        </div>
+    );
 
     return (
         <GameWrapper>
@@ -40,5 +62,5 @@ export default () => {
             <Instructions/>
             <UnoComponent/>
         </GameWrapper>
-    )
-}
+    );
+};
