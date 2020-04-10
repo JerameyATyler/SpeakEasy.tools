@@ -24,6 +24,7 @@ export default () => {
                 <Typography
                     variant='subtitle1'
                     color='secondary'
+                    tabIndex='0'
                 >
                     Practice on randomly generated multiple choice questions.
                 </Typography>
