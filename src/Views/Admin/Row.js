@@ -2,23 +2,40 @@ import React, {useState} from "react";
 import TableCell from "@material-ui/core/TableCell";
 import {Theme} from '../../Components/Theme';
 import Input from "@material-ui/core/Input";
-import {Typography} from "@material-ui/core";
+import {makeStyles, Typography} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Edit from "@material-ui/icons/Edit";
 import Delete from "@material-ui/icons/Delete";
 import TableRow from "@material-ui/core/TableRow";
-import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
+import HearingIcon from '@material-ui/icons/Hearing';
 import Clear from '@material-ui/icons/Clear';
 import Check from '@material-ui/icons/Check';
 import gql from "graphql-tag";
 import {useMutation} from "@apollo/react-hooks";
 import {columns} from "./Header";
-import GetNatives from "./GetNatives";
 import Modal from "@material-ui/core/Modal";
-import NativeCarousel from "./NativeCarousel";
+import SampleCarousel from "./SampleCarousel";
+import clsx from "clsx";
 
-const Row = (props) => {
-    const lesson = props.data;
+const useStyles = makeStyles(theme => ({
+    carousel: {
+        display: 'flex',
+        width: '90%',
+        height: '90%',
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+    modal: {
+        display: 'flex',
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+}));
+
+const Row = ({data}) => {
+    const classes = useStyles(Theme);
+
     const DELETE_LESSON = gql`
     mutation DeleteLesson($id: Int!) {
       delete_lessons(where: {id: {_eq: $id}}) {
@@ -38,12 +55,11 @@ const Row = (props) => {
         e.preventDefault();
         e.stopPropagation();
         deleteLessonMutation({
-            variables: {id: lesson.id}
+            variables: {id: data.id}
         });
     };
 
     const [edit, setEdit] = useState(false);
-    const [nativeExamples, setNativeExamples] = useState(null);
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
@@ -54,7 +70,7 @@ const Row = (props) => {
     };
 
     return (
-        <TableRow hover role='checkbox' tabIndex={-1} key={lesson.id}>
+        <TableRow hover role='checkbox' tabIndex={-1} key={data.id}>
             {columns.slice(0, 6).map(column => (
                 <TableCell
                     key={column.id}
@@ -65,7 +81,7 @@ const Row = (props) => {
                 >
                     {edit &&
                     <Input
-                        defaultValue={lesson[column.id]}
+                        defaultValue={data[column.id]}
                         style={{color: Theme.palette.secondary.contrastText}}
                     />
                     }
@@ -73,7 +89,7 @@ const Row = (props) => {
                     <Typography
                         variant='subtitle1'
                     >
-                        {lesson[column.id]}
+                        {data[column.id]}
                     </Typography>
                     }
                 </TableCell>
@@ -84,32 +100,22 @@ const Row = (props) => {
                     minWidth: 85,
                     color: Theme.palette.secondary.contrastText
                 }}
-            > {nativeExamples ?
-                <>
-                    <IconButton
-                        style={{color: Theme.palette.secondary.contrastText}}
-                        onClick={handleOpen}
-                    >
-                        <RecordVoiceOverIcon/>
-                    </IconButton>
-                    <Modal
-                        open={open}
-                        onClose={handleClose}
-                    >
-                        <>
-                            <NativeCarousel
-                                natives={nativeExamples}
-                            />
-                        </>
-                    </Modal>
-                </>
-                :
-                <GetNatives
-                    graphemes={lesson.chinese}
-                    setNatives={setNativeExamples}
-                    setOpen={setOpen}
-                />
-            }
+            >
+                <IconButton
+                    style={{color: Theme.palette.secondary.contrastText}}
+                    onClick={handleOpen}
+                >
+                    <HearingIcon/>
+                </IconButton>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    className={clsx(classes.modal)}
+                >
+                    <div className={clsx(classes.carousel)}>
+                        {open && <SampleCarousel samples={data.samples}/>}
+                    </div>
+                </Modal>
             </TableCell>
             <TableCell
                 key='edit'

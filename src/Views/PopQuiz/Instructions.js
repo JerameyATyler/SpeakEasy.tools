@@ -1,17 +1,33 @@
 import React from "react";
-import {Typography} from "@material-ui/core";
-import Divider from "@material-ui/core/Divider";
+import {makeStyles, Typography} from "@material-ui/core";
+import clsx from "clsx";
+import {Theme} from "../../Components/Theme";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
+    pad: {
+        display: 'flex',
+        height: '100%',
+        justifyContent: 'center',
+    }
+}));
 
 export default () => {
+    const classes = useStyles(Theme);
     return (
-        <>
-            <Typography
-                variant='subtitle1'
-                color='secondary'
-            >
-                Practice on randomly generated multiple choice questions.
-            </Typography>
-            <Divider/>
-        </>
+        <div className={clsx(classes.root)}>
+            <div className={clsx(classes.pad)}>
+                <Typography
+                    variant='subtitle1'
+                    color='secondary'
+                >
+                    Practice on randomly generated multiple choice questions.
+                </Typography>
+            </div>
+        </div>
     )
 };

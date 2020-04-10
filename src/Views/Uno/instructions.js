@@ -10,20 +10,31 @@ export default () => {
                 variant='subtitle1'
                 color='secondary'
             >
-                How to play this game...
+                The first player to play all of the cards in their hand wins.
             </Typography>
             <Typography
-                variant='h6'
+                paragraph
                 color='secondary'
             >
-                1. Step one
+                Setup: each player draws seven card from the pile.
             </Typography>
             <Divider/>
             <Typography
-                variant='h6'
+                paragraph
                 color='secondary'
-            >
-                2. Step two
+            >	
+            	Gameplay:
+                The game starts by revealing the card at the top of the pile.
+                The starter will try to match a card in his hand by color or number with the card revealed.
+                If he cannot, then he must draw a card.  He can play the newly drawn card if able.
+            	The next player repeats the process above. If the round ends with the last player not playing any card, he can play any card.
+            </Typography>
+            <Divider/>
+            <Typography
+                paragraph
+                color='secondary'
+            >	
+            	Action cards are cards that have special functions, including forcing the next player to draw cards or skipping the next player.
             </Typography>
         </>
     )

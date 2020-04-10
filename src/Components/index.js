@@ -7,4 +7,5 @@ export {GameWrapper} from './GameWrapper';
 export {InstructionsPanel} from './InstructionsPanel';
 export {ConfigBar} from './ConfigBar';
 export {LeftDrawer} from './LeftDrawer';
-export {NativeQuickView} from './NativeQuickView';
+export {VoiceRecorder} from './VoiceRecorder';
+export {WordPicker} from './WordPicker';

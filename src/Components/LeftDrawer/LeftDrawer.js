@@ -115,14 +115,14 @@ export default (props) => {
                         <ListItemText primary='Memory' className={clsx(classes.icon)}/>
                     </ListItem>
                 </NavLink>
-                <NavLink to='/flashcards'
+                {/*<NavLink to='/flashcards'
                          activeClassName={clsx(classes.activeLink)}
                 >
                     <ListItem button key={'flashCards'}>
                         <ListItemIcon><FlashCardIcon className={clsx(classes.icon)}/></ListItemIcon>
                         <ListItemText primary='Flash Cards' className={clsx(classes.icon)}/>
                     </ListItem>
-                </NavLink>
+                </NavLink>*/}
                 <NavLink to='/popquiz'
                          activeClassName={clsx(classes.activeLink)}
                 >
@@ -147,6 +147,7 @@ export default (props) => {
                         <ListItemText primary='Uno' className={clsx(classes.icon)}/>
                     </ListItem>
                 </NavLink>
+                <Divider/>
             </List>
         </Drawer>
     );

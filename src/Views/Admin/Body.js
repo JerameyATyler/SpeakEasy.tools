@@ -3,8 +3,7 @@ import TableBody from "@material-ui/core/TableBody";
 import Row from "./Row";
 import AddRow from "./AddRow";
 
-const Body = (props) => {
-    const data = props.data;
+const Body = ({data}) => {
     return (
         <TableBody>
             {data.map(lesson =>

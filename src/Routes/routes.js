@@ -10,7 +10,7 @@ import {
     PopQuiz,
     Profile,
     ToneTrainer,
-    Uno
+    Uno,
 } from "../Views";
 
 const routes = [

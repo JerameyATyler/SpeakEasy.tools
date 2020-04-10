@@ -6,28 +6,20 @@ import clsx from "clsx";
 import {InstructionsPanel} from "../InstructionsPanel";
 
 const useStyles = makeStyles(theme => ({
-    gameWrapper: {
-        display: 'flex',
-        flexDirection: 'column',
-        color: theme.palette.primary.contrastText,
-        backgroundColor: theme.palette.primary.light,
-        height: '80vh',
-        width: '80vw',
-        padding: theme.spacing(1)
-    },
-    content: {
-        display: 'flex',
-        flexGrow: 1,
-        flexDirection: 'row',
-    },
-    header: {},
-    toolbar: theme.mixins.toolbar,
-    game: {
+    root: {
+        flex: '1 1 100%',
         padding: theme.spacing(1),
-        height: '100%',
-        width: '100%',
-        backgroundColor: theme.palette.secondary.dark,
+        display: 'flex',
+        flexFlow: 'column',
     },
+    row: {
+        flex: '1 1 100%',
+        display: 'flex',
+        alignItems: 'stretch'
+    },
+    game: {
+        flex: '1 1 100%',
+    }
 }));
 
 export const GameWrapper = (props) => {
@@ -35,12 +27,13 @@ export const GameWrapper = (props) => {
 
 
     return (
-
-        <div className={clsx(classes.gameWrapper)}>
-            <ConfigBar>
-                {props.children[0]}
-            </ConfigBar>
-            <div className={clsx(classes.content)}>
+        <div className={clsx(classes.root)}>
+            <div className={clsx(classes.configBar)}>
+                <ConfigBar>
+                    {props.children[0]}
+                </ConfigBar>
+            </div>
+            <div className={clsx(classes.row)}>
                 <div className={clsx(classes.instructions)}>
                     <InstructionsPanel>
                         {props.children[1]}

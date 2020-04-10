@@ -1,71 +1,26 @@
-import {useEffect, useState} from 'react';
-import {MediaStream} from "../MediaStream";
 import PitchFinder from "pitchfinder";
+import {useEffect, useState} from "react";
 
-export default () => {
-    const [analyser, setAnalyser] = useState(null);
-    const [running, setRunning] = useState(false);
-    const [f0, setF0] = useState([]);
-
-    useEffect(() => {
-        const audioContext = new AudioContext();
-
-        let newAnalyser;
-        MediaStream({audio: true, video: false}).then(stream => {
-            if (audioContext.state === 'closed') return;
-
-            const source = audioContext.createMediaStreamSource(stream);
-
-            newAnalyser = audioContext.createAnalyser();
-            source.connect(newAnalyser);
-            newAnalyser.fftSize = 4096;
-
-            const bufferLength = newAnalyser.frequencyBinCount;
-            const dataArray = new Float32Array(bufferLength);
-
-            let reqId;
-            function analyse(){
-                    reqId = requestAnimationFrame(analyse);
-                    const PitchDetector = new PitchFinder.YIN({sampleRate: audioContext.sampleRate});
-                    newAnalyser.getFloatTimeDomainData(dataArray);
-                    const pitch =  Math.round((PitchDetector(dataArray) + Number.EPSILON) * 100) / 10000;
-                    setF0(prevState => {
-                            return [...prevState, pitch]
-
-                    });
-
-            }
-            analyse();
-
-            newAnalyser.start = () => {
-                setF0([]);
-                reqId = requestAnimationFrame(analyse)};
-
-            newAnalyser.stop = () => cancelAnimationFrame(reqId);
-
-            setAnalyser(newAnalyser);
-        });
-
-        return () => {
-            if (newAnalyser) {
-                newAnalyser.stop();
-            }
-            if (audioContext) {
-                audioContext.close();
-            }
-        }
-    }, []);
+export default (arrayBuffer, sampleRate) => {
+    const [f0, setF0] = useState(null);
 
     useEffect(() => {
-        if (analyser) {
-            if (running) {
-                analyser.start();
-            } else {
-                analyser.stop();
-            }
-        } else {
-            setRunning(false);
+        if(!(arrayBuffer && sampleRate)) return;
+
+        const detector = PitchFinder.YIN({sampleRate: sampleRate});
+        const float32Array = new Float32Array(arrayBuffer);
+        const bufferSize = 512;
+
+        let p = [];
+
+        for(let i = 0; i < float32Array.length; i += bufferSize){
+            const fragment = float32Array.slice(i, Math.min(i + bufferSize, float32Array.length));
+            const pitch = detector(fragment);
+            p.push(pitch);
         }
-    }, [running, analyser]);
-    return [running, setRunning, f0];
+
+        setF0(p);
+    }, [arrayBuffer, sampleRate]);
+
+    return f0;
 };
