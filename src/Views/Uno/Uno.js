@@ -9,16 +9,16 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
     card:{
-        width: '116px',
-        height: '178px',
+        width: '58px',
+        height: '89px',
         float: 'left',
         background: '#fff',
         borderRadius: '5px',
         display: 'table',
         boxSizing: 'border-box',
         padding: '5px',
-        margin: '10px',
-        fontSize: '100px',
+        margin: '2px',
+        fontSize: '50px',
         textShadow: 
             '1px  1px 0 #000000,-1px -1px 0 #000000,-1px  1px 0 #000000,1px -1px 0 #000000,1px  0   0 #000000,-1px  0   0 #000000,0   -1px 0 #000000, 0    1px 0 #000000,4px  4px 0 #000000',
         boxShadow: '0 0 10px #aaaaaa',
@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
             display: 'inline-block',
             position: 'absolute',
             lineHeight: '0',
-            fontSize: '20px',
+            fontSize: '10px',
             color: '#ffffff',
             textShadow: '1px  1px 0 #000000,-1px -1px 0 #000000,-1px  1px 0 #000000,1px -1px 0 #000000,1px  0   0 #000000,-1px  0   0 #000000,0   -1px 0 #000000,0    1px 0 #000000,2px  2px 0 #000000',
             top: '15px',
@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
             display: 'inline-block',
             position: 'absolute',
             lineHeight: '0',
-            fontSize: '20px',
+            fontSize: '10px',
             color: '#ffffff',
             textShadow: '1px  1px 0 #000000,-1px -1px 0 #000000,-1px  1px 0 #000000,1px -1px 0 #000000,1px  0   0 #000000,-1px  0   0 #000000,0   -1px 0 #000000,0    1px 0 #000000,2px  2px 0 #000000',
             bottom: '15px',
@@ -62,9 +62,57 @@ const useStyles = makeStyles(theme => ({
         verticalAlign: 'middle',
         background: '#ffffff',
         margin: 'auto',
-        padding: '0 26px',
+        padding: '0 13px',
         borderRadius: '100px 60px / 120px 60px',
-        lineHeight: '1.4',
+        lineHeight: '0.7',
+    },
+    board:{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        justifyContent: 'space-around',
+        textAlign: 'center',
+        height: '100%',
+        width: '100%',
+    },
+    left:{
+        width: '20vh',
+        position: 'relative',
+        top: '27vh',
+    },
+    center:{
+        width: '60vh',
+    },
+    anotherPlayer:{
+        position: 'relative',
+        top: '32vh',
+        WebkitTransform: 'rotate(90deg)',
+        // width: '60%',
+    },
+    deck:{
+        position: 'relative',
+        top: '22vh',
+        left: '4vw',
+    },
+    hand:{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: '10px',
+        width: '60%',
+        left: '400px',
+    },
+    right:{
+        width: '20vh',
+        position: 'relative',
+        top: '27vh',
+    },
+    blank:{
+        background: '#0F2027',
+        background: '-webkit-linear-gradient(to top, #2C5364, #203A43, #0F2027)',
+        background: 'linear-gradient(to top, #2C5364, #203A43, #0F2027)',
     },
     blue:{
         color: '#0063B3',
@@ -81,6 +129,9 @@ const useStyles = makeStyles(theme => ({
     yellow:{
         color: '#E6CA1E',
         background: '#E6CA1E',
+    },
+    unknown:{
+        color:'#DAD6F6',
     },
     num1:{
         '&::before':{
@@ -167,31 +218,58 @@ export default () => {
     const UnoComponent = () => {
         // This is where the HTML for Uno will go. You can put some variables here, but not state variables
         return (
-            <div>
-                <div className = {clsx(classes.card, classes.num1, classes.blue)}>
-                    <span className = {classes.inner}>
-                        <span className = {classes.mark}>1</span>
-                    </span>
+            <div className = {classes.board}>
+                <div className = {classes.left}>
+                    <div className = {clsx(classes.card, classes.blank)}>
+                        <span className = {classes.unknown}>
+                            ?
+                        </span>
+                    </div>
                 </div>
-                <div className = {clsx(classes.card, classes.num2, classes.yellow)}>
-                    <span className = {classes.inner}>
-                        <span className = {classes.mark}>2</span>
-                    </span>
+                <div className = {classes.center}>
+                    <div className = {classes.anotherPlayer}>
+                        <div className = {clsx(classes.card, classes.blank)}>
+                            <span className = {classes.unknown}>
+                                ?
+                            </span>
+                        </div>
+                    </div>
+                    <div className = {classes.deck}>
+                        <div className = {clsx(classes.card, classes.num7, classes.yellow)}>
+                            <span className = {classes.inner}>
+                                <span className = {classes.mark}>7</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div className = {classes.hand}>
+                        <div className = {clsx(classes.card, classes.num3, classes.blue)}>
+                            <span className = {classes.inner}>
+                                <span className = {classes.mark}>3</span>
+                            </span>
+                        </div>
+                        <div className = {clsx(classes.card, classes.num2, classes.yellow)}>
+                            <span className = {classes.inner}>
+                                <span className = {classes.mark}>2</span>
+                            </span>
+                        </div>
+                        <div className = {clsx(classes.card, classes.num5, classes.red)}>
+                            <span className = {classes.inner}>
+                                <span className = {classes.mark}>5</span>
+                            </span>
+                        </div>
+                        <div className = {clsx(classes.card, classes.num8, classes.green)}>
+                            <span className = {classes.inner}>
+                                <span className = {classes.mark}>8</span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div className = {clsx(classes.card, classes.num3, classes.red)}>
-                    <span className = {classes.inner}>
-                        <span className = {classes.mark}>3</span>
-                    </span>
-                </div>
-                <div className = {clsx(classes.card, classes.num4, classes.green)}>
-                    <span className = {classes.inner}>
-                        <span className = {classes.mark}>4</span>
-                    </span>
-                </div>
-                <div className = {clsx(classes.card, classes.num6, classes.blue)}>
-                    <span className = {classes.inner}>
-                        <span className = {classes.mark}>6</span>
-                    </span>
+                <div className = {classes.right}>
+                    <div className = {clsx(classes.card, classes.blank)}>
+                        <span className = {classes.unknown}>
+                            ?
+                        </span>
+                    </div>
                 </div>
             </div>
             )
