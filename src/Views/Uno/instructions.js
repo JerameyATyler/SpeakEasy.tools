@@ -9,12 +9,14 @@ export default () => {
             <Typography
                 variant='subtitle1'
                 color='secondary'
+                tabIndex='0'
             >
                 The first player to play all of the cards in their hand wins.
             </Typography>
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >
                 Setup: each player draws seven card from the pile.
             </Typography>
@@ -22,6 +24,7 @@ export default () => {
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >	
             	Gameplay:
                 The game starts by revealing the card at the top of the pile.
@@ -33,6 +36,7 @@ export default () => {
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >	
             	Action cards are cards that have special functions, including forcing the next player to draw cards or skipping the next player.
             </Typography>

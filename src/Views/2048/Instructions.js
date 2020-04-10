@@ -25,6 +25,8 @@ export default () => {
                 <Typography
                     variant='subtitle1'
                     color='secondary'
+                    tabIndex='0'
+                    aria-label='game description: Swipe to match up the tiles. Can you get 2048?'
                 >
                     Swipe to match up the tiles. Can you get 2048?
                 </Typography>
@@ -33,6 +35,8 @@ export default () => {
                 <Typography
                     variant='h6'
                     color='secondary'
+                    tabIndex='0'
+                    aria-label='game mode: 1. Select Game Mode'
                 >
                     1. Select Game Mode
                 </Typography>
@@ -42,6 +46,8 @@ export default () => {
                 <Typography
                     paragraph
                     color='secondary'
+                    tabIndex='0'
+                    aria-label='Chinese description: Text is in Chinese'
                 >
                     <em>Chinese - </em>
                     Text is in Chinese
@@ -51,6 +57,8 @@ export default () => {
                 <Typography
                     paragraph
                     color='secondary'
+                    tabIndex='0'
+                    aria-label='Pinyin description: Text is in Pinyin'
                 >
                     <em>Pinyin - </em>
                     Text is in Pinyin
@@ -60,6 +68,8 @@ export default () => {
                 <Typography
                     paragraph
                     color='secondary'
+                    tabIndex='0'
+                    aria-label='English description: Text is in English'
                 >
                     <em>English - </em>
                     Text is in English
@@ -69,6 +79,8 @@ export default () => {
                 <Typography
                     paragraph
                     color='secondary'
+                    tabIndex='0'
+                    aria-label='adaptive description:Text starts in English but transitions to Chinese as you go'
                 >
                     <em>Adaptive - </em>
                     Text starts in English but transitions to Chinese as you go
@@ -78,6 +90,8 @@ export default () => {
                 <Typography
                     paragraph
                     color='secondary'
+                    tabIndex='0'
+                    aria-label='chaos description:Text changes language every time'
                 >
                     <em>Chaos - </em>
                     Text changes language every time
@@ -87,6 +101,8 @@ export default () => {
                 <Typography
                     paragraph
                     color='secondary'
+                    tabIndex='0'
+                    aria-labelledby='color only description: No text, just colors'
                 >
                     <em>Color Only - </em>
                     No text, just colors

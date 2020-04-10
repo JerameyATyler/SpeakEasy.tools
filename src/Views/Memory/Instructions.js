@@ -8,12 +8,14 @@ export default () => {
             <Typography
                 variant='subtitle1'
                 color='secondary'
+                tabIndex='0'
             >
                 Look for pairs of matching cards by flipping them over.
             </Typography>
             <Typography
                 variant='h6'
                 color='secondary'
+                tabIndex='0'
             >
                 1. Select Game Mode
             </Typography>
@@ -21,6 +23,7 @@ export default () => {
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >
                 <em>Chinese - </em>
                 Card text is in Chinese
@@ -28,6 +31,7 @@ export default () => {
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >
                 <em>Pinyin - </em>
                 Card text is in Pinyin
@@ -35,6 +39,7 @@ export default () => {
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >
                 <em>English - </em>
                 Card text is in English
@@ -42,6 +47,7 @@ export default () => {
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >
                 <em>Hybrid - </em>
                 Card text is in Chinese,
@@ -50,6 +56,7 @@ export default () => {
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >
                 <em>Chaos - </em>
                 Card text changes language every time
@@ -58,12 +65,14 @@ export default () => {
             <Typography
                 variant='h6'
                 color='secondary'
+                tabIndex='0'
             >
                 2. Select board size
             </Typography>
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >
                 Determines how many cards will be on the board
             </Typography>
@@ -71,12 +80,14 @@ export default () => {
             <Typography
                 variant='h6'
                 color='secondary'
+                tabIndex='0'
             >
                 3. Load Board
             </Typography>
             <Typography
                 paragraph
                 color='secondary'
+                tabIndex='0'
             >
                 Uses the current options to render a game board
             </Typography>
