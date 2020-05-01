@@ -1,25 +1,31 @@
 import React from "react";
 import {NavLink, Route} from "react-router-dom";
 import {Typography} from "@material-ui/core";
+import {Theme} from "../../utils";
 
-export const Breadcrumbs = () => {
+export default () => {
     return (
-        <>
-            <Route path='/:path' component={BreadcrumbItem}/>
-        </>
-    )
+        <Route path='/:path' component={BreadcrumbItem}/>
+    );
 };
 
-const BreadcrumbItem = ({match}) => (
-    <>
-        <NavLink to={match.url || ''}>
+const BreadcrumbItem = ({match}) => {
+    return (
+        <NavLink to={match.url || ''}
+                 activeStyle={{
+                     fontWeight: 'bold',
+                     color: Theme.palette.secondary.contrastText
+                 }}
+                 style={{
+                     color: Theme.palette.secondary.contrastText
+                 }}>
             <Typography
                 variant='h4'
-                color='secondary'
+                align='center'
             >
-                {match.url}</Typography>
+                {match.url.toUpperCase()}
+            </Typography>
             <Route path={`${match.url}/:path`} component={BreadcrumbItem}/>
         </NavLink>
-    </>
-);
-
+    );
+}

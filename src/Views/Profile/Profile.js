@@ -1,52 +1,40 @@
 import React from "react";
-import { useAuth0 } from "../../react-auth0-spa";
-import {makeStyles} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import {Theme} from "../../utils";
 import clsx from "clsx";
-import {Theme} from "../../Components/Theme";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
+import {ViewWrapper} from "../../Components/ViewWrapper";
+import CoursesPanel from "./CoursesPanel";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        display: 'flex',
+        width: '100%',
+        height: '100%',
+        overflow: 'auto'
     },
-    content: {
+    row: {
+        width: '100%',
         display: 'flex',
-        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    pad: {
         padding: theme.spacing(1),
     },
-    image: {
-        width: 300,
-        height: 300,
-    }
 }));
 
-const Profile = () => {
+export default () => {
+    document.title = 'Profile';
     const classes = useStyles(Theme);
-    const { loading, user } = useAuth0();
-
-    if (loading || !user) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <div className={clsx(classes.root)}>
-            <img className={clsx(classes.image)} src={user.picture} alt="Profile" />
-            <div className={clsx(classes.content)}>
-                <Typography
-                    variant='h4'
-                    color='primary'>
-                    {user.name}
-                </Typography>
-                <Divider/>
-                <Typography
-                    variant='subtitle1'
-                    color='primary'>
-                    {user.email}
-                </Typography>
+            <div className={clsx(classes.row)}>
+                <ViewWrapper/>
+            </div>
+            <div className={clsx(classes.row)}>
+                <div className={clsx(classes.pad)} style={{width: '90%'}}>
+                    <CoursesPanel/>
+                </div>
             </div>
         </div>
-    );
-};
-
-export default Profile;
+    )
+}

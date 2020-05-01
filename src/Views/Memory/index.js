@@ -1,1 +1,1 @@
-export {Memory} from './Memory';
+export {default as Memory} from './Memory'

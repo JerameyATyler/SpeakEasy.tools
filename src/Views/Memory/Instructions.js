@@ -1,85 +1,34 @@
 import React from "react";
-import {Typography} from "@material-ui/core";
-import Divider from "@material-ui/core/Divider";
+import {makeStyles} from "@material-ui/core/styles";
+import {Theme} from "../../utils";
+import clsx from "clsx";
+import Typography from "@material-ui/core/Typography";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+
+    },
+    column: {
+
+    },
+    pad: {
+
+    }
+}));
 
 export default () => {
+    const classes = useStyles(Theme);
+
     return (
-        <>
-            <Typography
-                variant='subtitle1'
-                color='secondary'
-            >
-                Look for pairs of matching cards by flipping them over.
-            </Typography>
-            <Typography
-                variant='h6'
-                color='secondary'
-            >
-                1. Select Game Mode
-            </Typography>
-            <Divider/>
-            <Typography
-                paragraph
-                color='secondary'
-            >
-                <em>Chinese - </em>
-                Card text is in Chinese
-            </Typography>
-            <Typography
-                paragraph
-                color='secondary'
-            >
-                <em>Pinyin - </em>
-                Card text is in Pinyin
-            </Typography>
-            <Typography
-                paragraph
-                color='secondary'
-            >
-                <em>English - </em>
-                Card text is in English
-            </Typography>
-            <Typography
-                paragraph
-                color='secondary'
-            >
-                <em>Hybrid - </em>
-                Card text is in Chinese,
-                Pinyin, and English
-            </Typography>
-            <Typography
-                paragraph
-                color='secondary'
-            >
-                <em>Chaos - </em>
-                Card text changes language every time
-            </Typography>
-            <Divider/>
-            <Typography
-                variant='h6'
-                color='secondary'
-            >
-                2. Select board size
-            </Typography>
-            <Typography
-                paragraph
-                color='secondary'
-            >
-                Determines how many cards will be on the board
-            </Typography>
-            <Divider/>
-            <Typography
-                variant='h6'
-                color='secondary'
-            >
-                3. Load Board
-            </Typography>
-            <Typography
-                paragraph
-                color='secondary'
-            >
-                Uses the current options to render a game board
-            </Typography>
-        </>
+        <div className={clsx(classes.root)}>
+            <div className={clsx(classes.column)}>
+                <div className={clsx(classes.pad)}>
+                    <Typography>asdfaf</Typography>
+                </div>
+                <div className={clsx(classes.pad)}>
+                    <Typography>awesrf</Typography>
+                </div>
+            </div>
+        </div>
     )
-};
+}

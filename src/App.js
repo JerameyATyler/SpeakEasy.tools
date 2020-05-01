@@ -1,69 +1,102 @@
-import React, {useState} from "react";
+/*
+* This file is your actual application.
+*/
+
+import React, {useState} from 'react';
+import {Switch} from "react-router";
+import {useAuth0} from "./react-auth0-spa";
+import {ApolloClient} from "apollo-client";
+import {HttpLink} from 'apollo-link-http';
+import {setContext} from 'apollo-link-context';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {ApolloProvider} from '@apollo/react-hooks';
+import {CssBaseline, makeStyles, Typography} from "@material-ui/core";
+import clsx from 'clsx';
 import jwt from 'jsonwebtoken';
 
-import {/*Footer,*/ Header, LeftDrawer, Theme} from "./Components";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { ApolloProvider } from "@apollo/react-hooks";
+import {Routes} from "./Routes";
+import {GRAPHQL_URL, Theme} from "./utils";
+import {SideBar} from "./Components";
 
-import { useAuth0 } from "./react-auth0-spa";
-import {HttpLink} from "apollo-link-http";
-import {ApolloClient} from "apollo-client";
-import {setContext} from "apollo-link-context";
-import {CssBaseline, makeStyles} from "@material-ui/core";
-import clsx from "clsx";
-import {Switch} from "react-router";
-import {MakeRoutes} from "./Routes/routes";
-import {GRAPHQL_URL} from "./utils/constants";
-import {Construction} from "./Components/Construction";
-
+/* This object sets up the CSS class names that will be used for this component. */
 const useStyles = makeStyles(theme => ({
+    /*
+    * root is the highest level div/container in the application. Set width and height to 100% of the view width and
+    * view height respectively. Set display to flex so children divs can behave responsively.
+    */
     root: {
-        display: 'flex'
+        height: '100vh',
+        width: '100vw',
+        display: 'flex',
+        overflow: 'hidden'
     },
-    toolbar: theme.mixins.toolbar,
+    /*
+    * The div that will hold our primary content. The flex property allows it to stretch and shrink with its parent.
+    */
     content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
+        flex: '1 1 100%',
     },
+    column: {
+    }
 }));
 
-function App ()  {
+export default () => {
+    /* Passes our Theme to the classes above, allowing us to access properties of the Theme like palette. */
     const classes = useStyles(Theme);
-
+    /* The user's access token. Lets them access data based on their role; admin, user, or anonymous. */
     const [accessToken, setAccessToken] = useState('');
     const {getTokenSilently, loading} = useAuth0();
     const [userRole, setUserRole] = useState('anonymous');
-    const [open, setOpen] = useState(false);
+    /* Simple component to show while the page is loading */
+    const LoadingComponent = () => {
+        return (
+            <div className={clsx(classes.root)}>
+                {/* CssBaseline helps make CSS look the same across different browsers */}
+                <CssBaseline/>
+                <div className={clsx(classes.content)}>
+                    <Typography
+                        variant='h4'
+                    >
+                        Loading...
+                    </Typography>
+                </div>
+            </div>)
+    };
 
-    if(loading) {
-        return <p>Loading...</p>;
+    if (loading) {
+        return <LoadingComponent/>
     }
 
+    /*
+    * Fetch the token asynchronously so it doesn't lock loading of other visual elements. If it fails display
+    * an error message in the console.
+    */
     const getAccessToken = async () => {
         try {
             const token = await getTokenSilently();
             const role = await jwt.decode(token)['https://hasura.io/jwt/claims']['x-hasura-default-role'];
             setAccessToken(token);
             setUserRole(role);
-        }catch (e) {
-            console.log(e);
+        } catch (e) {
+            console.error(e);
         }
     };
     getAccessToken();
 
+    /* HTTP link to the GraphQL engine */
     const httpLink = new HttpLink({
         uri: GRAPHQL_URL,
     });
-
+    /* Appends necessary headers to requests so that GraphQL engine can validate user access. */
     const authLink = setContext((_, {headers}) => {
-        if(accessToken){
+        if (accessToken) {
             return {
                 headers: {
                     ...headers,
                     Authorization: `Bearer ${accessToken}`,
                 }
             };
-        }else {
+        } else {
             return {
                 headers: {
                     ...headers
@@ -72,27 +105,32 @@ function App ()  {
         }
     });
 
+    /* Set up the Apollo Client for querying the GraphQL engine */
     const client = new ApolloClient({
         link: authLink.concat(httpLink),
         cache: new InMemoryCache()
     });
 
+    /*
+    * Apollo Provider wraps the application so that any page within the application will use the same Apollo Provider.
+    * Outer div conforms to fill the view port. Inner div fills its parent. Switch handles changing the application's
+    * content when you navigate to a page. All pages render within the Switch. Use root if you want to add things like
+    * header, footer, or navigation menus so they don't occlude your main content. Use content for components you want
+    * occupy the same space as your main content.
+    */
     return (
         <ApolloProvider client={client}>
             <div className={clsx(classes.root)}>
                 <CssBaseline/>
-                <LeftDrawer open={open} setOpen={() => setOpen(!open)}/>
+                <div className={clsx(classes.column)}>
+                    <SideBar userRole={userRole}/>
+                </div>
                 <div className={clsx(classes.content)}>
-                    <div className={clsx(classes.toolbar)}/>
                     <Switch>
-                        {MakeRoutes}
+                        {Routes()}
                     </Switch>
                 </div>
-                <Header userRole={userRole}/>
-                <Construction/>
-                {/* <Footer/> */}
             </div>
         </ApolloProvider>
-    )
+    );
 }
-export default App;

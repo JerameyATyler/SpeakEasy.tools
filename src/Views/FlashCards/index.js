@@ -1,1 +1,0 @@
-export {FlashCards} from './FlashCards';

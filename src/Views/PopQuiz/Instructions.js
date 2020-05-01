@@ -1,17 +1,20 @@
 import React from "react";
-import {Typography} from "@material-ui/core";
-import Divider from "@material-ui/core/Divider";
+import {makeStyles} from "@material-ui/core/styles";
+import {Theme} from "../../utils";
+import clsx from "clsx";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+
+    }
+}));
 
 export default () => {
+    const classes = useStyles(Theme);
+
     return (
-        <>
-            <Typography
-                variant='subtitle1'
-                color='secondary'
-            >
-                Practice on randomly generated multiple choice questions.
-            </Typography>
-            <Divider/>
-        </>
-    )
+        <div className={clsx(classes.root)}>
+
+        </div>
+    );
 };

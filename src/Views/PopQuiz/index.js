@@ -1,1 +1,1 @@
-export {PopQuiz} from './PopQuiz';
+export {default as PopQuiz} from './PopQuiz'

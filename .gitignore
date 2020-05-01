@@ -157,5 +157,9 @@ fabric.properties
 # Don't believe ^^^their lies^^^ does not completely cover Jetbrains
 .idea
 
-# SpeakEasy environment varialbes
+# Panorama environment varialbes
 src/config.js
+
+# Panoramic images
+images
+images/*

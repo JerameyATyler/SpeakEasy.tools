@@ -1,1 +1,0 @@
-export {ConfigBar} from './ConfigBar';

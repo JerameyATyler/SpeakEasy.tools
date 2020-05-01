@@ -1,24 +1,29 @@
-import ReactDOM from "react-dom";
-import React from "react";
-import {Router} from "react-router-dom";
-
-import "./utils/index.css";
-import * as serviceWorker from './utils/serviceWorker';
-import {Auth0Provider} from "./react-auth0-spa";
-import history from "./utils/history";
-import config from "./config";
-import App from "./App";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Router} from 'react-router-dom';
 import {MuiThemeProvider} from "@material-ui/core";
-import {Theme} from "./Components/Theme";
 
+import {Auth0Provider} from "./react-auth0-spa";
+import {history, Theme, serviceWorker} from "./utils";
+import App from "./App";
+import config from "./config";
+
+/*
+* This function handles the redirect that occurs after the authentication service returns.
+*/
 const onRedirectCallback = appState => {
     history.push(
         appState && appState.targetUrl
-            ? appState.targetUrl
+        ? appState.targetUrl
             : window.location.pathname
     );
 };
 
+/*
+* This function returns a React Router component for our application. There is a Router wrapper that handles application
+* routing, there is an Auth0Provider which handles user authentication, and there is a MuiThemeProvider which handles
+* UI theme management.
+*/
 const mainRoutes = (
     <Router history={history}>
         <Auth0Provider
@@ -35,5 +40,7 @@ const mainRoutes = (
     </Router>
 );
 
-ReactDOM.render(mainRoutes, document.getElementById("root"));
+/* Apply our React app to the DOM */
+ReactDOM.render(mainRoutes, document.getElementById('root'));
+/* Boilerplate code. */
 serviceWorker.unregister();
