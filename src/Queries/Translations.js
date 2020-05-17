@@ -7,8 +7,8 @@ export const GetTranslations = () => {
         query getTranslations {
               translations(limit: 10) {
                 id
-                native_vocabulary_id
-                target_vocabulary_id
+                vocabulary_id_1
+                vocabulary_id_2
               }
         }
     `;

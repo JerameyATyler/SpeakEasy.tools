@@ -6,6 +6,8 @@
 import * as serviceWorker from './serviceWorker';
 
 export {GRAPHQL_URL} from './constants';
+export {default as Shuffle} from './Shuffle';
 export {default as Theme} from './Theme';
 export {default as history} from './history';
 export {serviceWorker};
+export {encodeImageFileAsURL} from './FileConversion';

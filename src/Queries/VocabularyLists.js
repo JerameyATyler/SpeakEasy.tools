@@ -9,7 +9,7 @@ export const GetVocabularyLists = lessonId => {
                 id
                 name
                 description
-                translations
+                is_public
             }
         }
     `;
@@ -28,17 +28,15 @@ export const GetVocabularyLists = lessonId => {
     return [vocabularyLists, refetch];
 };
 
-export const InsertVocabularyLists = (courseId, lessonId, userId, name, description, translations) => {
+export const InsertVocabularyLists = (lessonId, name, description, isPublic) => {
     /* A GraphQL mutation. Mutations are like queries except they modify the graph. This one accepts variables. */
     const INSERT_VOCABULARY_LISTS = gql`
-        mutation insertVocabularyLists($courseId: Int!, $lessonId: Int!, $userId: String!, $name: String!, $description: String!, $translations: jsonb!) {
+        mutation insertVocabularyLists($lessonId: Int!, $name: String!, $description: String!, $isPublic: Boolean!) {
             insert_vocabulary_lists(objects: {
-                course_id: $courseId,
                 lesson_id: $lessonId
-                user_id: $userId,
                 name: $name,
                 description: $description,
-                translations: $translations
+                is_public: $isPublic
             }) {
                 affected_rows
                 returning {
@@ -56,17 +54,15 @@ export const InsertVocabularyLists = (courseId, lessonId, userId, name, descript
 
     /* Check the configuration and call the mutation */
     useEffect(() => {
-        if(!(courseId && lessonId && userId && name && description && translations)) return;
+        if(!(lessonId && isPublic && name && description)) return;
         insertVocabularyLists({
             variables: {
-                courseId: courseId,
                 lessonId: lessonId,
-                userId: userId,
                 name: name,
                 description: description,
-                translations: translations
+                isPublic: isPublic
             }});
-    }, [courseId, lessonId, userId, name, description, translations, insertVocabularyLists]);
+    }, [lessonId, isPublic, name, description, insertVocabularyLists]);
     /* Check the return value of the mutation and set output */
     useEffect(() => {
         if(!(data && data['insert_vocabulary_lists'])) return;
@@ -76,10 +72,10 @@ export const InsertVocabularyLists = (courseId, lessonId, userId, name, descript
     return vocabularyListId;
 };
 
-export const UpdateVocabularyList = (vocabularyListId, name, description, translations) => {
+export const UpdateVocabularyList = (vocabularyListId, name, description) => {
     /* A GraphQL mutation. Mutations are like queries except they modify the graph. This one accepts variables. */
     const UPDATE_VOCABULARY_LISTS = gql`
-        mutation updateVocabularyLists ($vocabularyListId: Int!, $name: String!, $description: String!, $translations: jsonb!){
+        mutation updateVocabularyLists ($vocabularyListId: Int!, $name: String!, $description: String!){
           update_vocabulary_lists(where: {id: {_eq: $vocabularyListId}}, _set: {description: $description, name: $name, translations: $translations}) {
             affected_rows
           }
@@ -94,15 +90,14 @@ export const UpdateVocabularyList = (vocabularyListId, name, description, transl
 
     /* Check the configuration and call the mutation */
     useEffect(() => {
-        if(!(vocabularyListId && name && description && translations)) return;
+        if(!(vocabularyListId && name && description)) return;
         updateVocabularyLists({
             variables: {
                 vocabularyListId: vocabularyListId,
                 name: name,
-                description: description,
-                translations: translations
+                description: description
             }});
-    }, [vocabularyListId, name, description, updateVocabularyLists, translations]);
+    }, [vocabularyListId, name, description, updateVocabularyLists]);
     /* Check the return value of the mutation and set output */
     useEffect(() => {
         if(!(data && data['update_vocabulary_lists'])) return;

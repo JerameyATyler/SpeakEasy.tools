@@ -23,9 +23,7 @@ export const GetModules = () => {
     */
     useEffect(() => {
         if (!data) return;
-        console.log(modules)
-        setModules(data.modules);
-    }, [data, modules]);
-
+        setModules([...data['modules']]);
+    }, [data]);
     return [modules, refetch]
 };

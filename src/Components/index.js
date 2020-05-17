@@ -1,3 +1,4 @@
+export {Agent} from './Agent';
 export {Breadcrumbs} from './Breadcrumbs';
 export {Card} from './Card';
 export {GoogleMap} from './GoogleMap';

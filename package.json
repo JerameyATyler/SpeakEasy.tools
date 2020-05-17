@@ -20,6 +20,7 @@
     "google-map-react": "^1.1.7",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
+    "jsoneditor": "^8.6.8",
     "jsonwebtoken": "^8.5.1",
     "machinelearn": "^2.1.5",
     "material-table": "^1.57.2",
@@ -41,7 +42,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:deploy": "react-scripts build && scp -r ./build/* admin@my.url:/var/www/my.url/html",
+    "build:deploy": "react-scripts build && scp -r ./build/* jeramey@speakeasy.tools:/var/www/speakeasy.tools/html",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.js",
     "lint:fix": "eslint src/**/*.js --fix"

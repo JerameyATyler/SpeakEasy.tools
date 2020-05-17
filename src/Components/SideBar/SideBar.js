@@ -9,10 +9,23 @@ import {useAuth0} from "../../react-auth0-spa";
 import {
     AccountCircle,
     Apps,
+    Build,
+    Cached,
     Casino,
+    Contacts,
     ExitToApp,
+    GridOn,
+    GridOff,
+    Help,
+    HelpOutline,
+    Info,
+    Keyboard,
     ListAlt,
     MenuBook,
+    Message,
+    Notes,
+    QuestionAnswer,
+    RecentActors,
     ShowChart,
     SpeakerNotes,
     SupervisorAccount,
@@ -49,11 +62,15 @@ export default ({userRole}) => {
 
     const [userOpen, setUserOpen] = useState(false);
     const [gamesOpen, setGamesOpen] = useState(false);
+    const [infoOpen, setInfoOpen] = useState(false);
+    const [toolsOpen, setToolsOpen] = useState(false);
 
     const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0();
 
     const toggleUser = () => setUserOpen(prevState => !prevState);
     const toggleGames = () => setGamesOpen(prevState => !prevState);
+    const toggleInfo = () => setInfoOpen(prevState => !prevState);
+    const toggleTools = () => setToolsOpen(prevState => !prevState);
 
     return (
         <div className={clsx(classes.root)}>
@@ -150,7 +167,7 @@ export default ({userRole}) => {
                     <ListItemIcon>
                         <Casino style={{color: Theme.palette.secondary.contrastText}}/>
                     </ListItemIcon>
-                    <ListItemText primary='Tools and Games'/>
+                    <ListItemText primary='Games'/>
                 </ListItem>
                 {gamesOpen && (
                     <ListItem style={{backgroundColor: Theme.palette.secondary.light}}>
@@ -172,23 +189,6 @@ export default ({userRole}) => {
                                     <ListItemText primary='2048'/>
                                 </ListItem>
                             </NavLink>
-                            <NavLink to='/dictionary'
-                                     activeStyle={{
-                                         fontWeight: 'bold',
-                                         color: Theme.palette.secondary.contrastText
-                                     }}
-                                     style={{
-                                         color: Theme.palette.secondary.contrastText
-                                     }}>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
-                                            <MenuBook style={{color: Theme.palette.secondary.contrastText}}/>
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText primary='Dictionary'/>
-                                </ListItem>
-                            </NavLink>
                             <NavLink to='/eyespy'
                                      activeStyle={{
                                          fontWeight: 'bold',
@@ -206,6 +206,40 @@ export default ({userRole}) => {
                                     <ListItemText primary='Eye-Spy'/>
                                 </ListItem>
                             </NavLink>
+                            <NavLink to='/jeopardy'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <QuestionAnswer style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Jeopardy'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/kakuro'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <GridOn style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Kakuro'/>
+                                </ListItem>
+                            </NavLink>
                             <NavLink to='/memory'
                                      activeStyle={{
                                          fontWeight: 'bold',
@@ -221,6 +255,157 @@ export default ({userRole}) => {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText primary='Memory'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/simonsays'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <Message style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Simon Says'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/sudoku'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <GridOn style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Sudoku'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/tileslider'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <GridOff style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Tile Slider'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/totd'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <Keyboard style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Typing of the Dead'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/uno'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <Sync style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Uno'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/wof'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <Cached style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Wheel of Fortune'/>
+                                </ListItem>
+                            </NavLink>
+                        </List>
+                    </ListItem>
+                )}
+                <ListItem
+                    button
+                    onClick={toggleTools}
+                >
+                    <ListItemIcon>
+                        <Build style={{color: Theme.palette.secondary.contrastText}}/>
+                    </ListItemIcon>
+                    <ListItemText primary='Tools'/>
+                </ListItem>
+                {toolsOpen && (
+                    <ListItem style={{backgroundColor: Theme.palette.secondary.light}}>
+                        <List>
+                            <NavLink to='/dictionary'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <MenuBook style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Dictionary'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/flashcards'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <Notes style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Flash Cards'/>
                                 </ListItem>
                             </NavLink>
                             <NavLink to='/popquiz'
@@ -274,7 +459,22 @@ export default ({userRole}) => {
                                     <ListItemText primary='Tone Trainer'/>
                                 </ListItem>
                             </NavLink>
-                            <NavLink to='/uno'
+                        </List>
+                    </ListItem>
+                )}
+                <ListItem
+                    button
+                    onClick={toggleInfo}
+                >
+                    <ListItemIcon>
+                        <Info style={{color: Theme.palette.secondary.contrastText}}/>
+                    </ListItemIcon>
+                    <ListItemText primary='Information'/>
+                </ListItem>
+                {infoOpen && (
+                    <ListItem style={{backgroundColor: Theme.palette.secondary.light}}>
+                        <List>
+                            <NavLink to='/about'
                                      activeStyle={{
                                          fontWeight: 'bold',
                                          color: Theme.palette.secondary.contrastText
@@ -285,10 +485,61 @@ export default ({userRole}) => {
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
-                                            <Sync style={{color: Theme.palette.secondary.contrastText}}/>
+                                            <RecentActors style={{color: Theme.palette.secondary.contrastText}}/>
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary='Uno'/>
+                                    <ListItemText primary='About Us'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/contact'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <Contacts style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Contact'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/faq'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <HelpOutline style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='FAQs'/>
+                                </ListItem>
+                            </NavLink>
+                            <NavLink to='/help'
+                                     activeStyle={{
+                                         fontWeight: 'bold',
+                                         color: Theme.palette.secondary.contrastText
+                                     }}
+                                     style={{
+                                         color: Theme.palette.secondary.contrastText
+                                     }}>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: Theme.palette.secondary.light}}>
+                                            <Help style={{color: Theme.palette.secondary.contrastText}}/>
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary='Help'/>
                                 </ListItem>
                             </NavLink>
                         </List>
