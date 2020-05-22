@@ -54,7 +54,7 @@ export const GetVocabulary = word => {
     useEffect(() => {
         if (!data) return;
         let vocab = {};
-        data.vocabulary.forEach(v => {
+        data['vocabulary'].forEach(v => {
             console.log(v);
         });
 

@@ -25,6 +25,11 @@ const useStyles = makeStyles(theme => ({
 export default () => {
     document.title = "Sudoku";
     const classes = useStyles(Theme);
+
+    const handleClick = () => {
+
+    }
+
     return (
         <div className={clsx(classes.root)}>
             <div className={clsx(classes.row)}>
@@ -32,7 +37,7 @@ export default () => {
                 />
             </div>
             <div className={clsx(classes.row)}>
-                <Board/>
+                <Board handleClick={handleClick}/>
             </div>
         </div>
     )
