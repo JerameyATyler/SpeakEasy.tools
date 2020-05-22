@@ -55,13 +55,12 @@ export const GetLessonsByUser = userId => {
     return [lessons, refetch]
 };
 
-export const InsertLesson = (courseId, userId, name, description) => {
+export const InsertLesson = (courseId, name, description) => {
     /* A GraphQL mutation. Mutations are like queries except they modify the graph. This one accepts variables. */
     const INSERT_LESSONS = gql`
-        mutation insertLessons($courseId: Int!, $userId: String!, $name: String!, $description: String!) {
+        mutation insertLessons($courseId: Int!, $name: String!, $description: String!) {
             insert_lessons(objects: {
                 course_id: $courseId,
-                user_id: $userId,
                 name: $name,
                 description: $description
             }) {
@@ -81,14 +80,13 @@ export const InsertLesson = (courseId, userId, name, description) => {
 
     /* Check the configuration and call the mutation */
     useEffect(() => {
-        if(!(courseId && userId && name && description)) return;
+        if(!(courseId && name && description)) return;
         insertLessons({variables: {
                 courseId: courseId,
-                userId: userId,
                 name: name,
                 description: description
             }});
-    }, [courseId, userId, name, description, insertLessons]);
+    }, [courseId, name, description, insertLessons]);
     /* Check the return value of the mutation and set output */
     useEffect(() => {
         if(!(data && data['insert_lessons'])) return;

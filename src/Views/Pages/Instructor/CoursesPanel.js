@@ -191,7 +191,7 @@ export default () => {
                         <Tab label={
                             <>
                                 {
-                                    courses && courses.length <= tabIndex ? (
+                                    !courses || (courses && courses.length) <= tabIndex ? (
                                         <TextField
                                             required
                                             label='Add Course'
@@ -213,7 +213,7 @@ export default () => {
                 <div className={clsx(classes.column)}>
                     <div className={clsx(classes.row)}>
                         <div>
-                            {courses && courses.length <= tabIndex ? (
+                            {!courses || (courses && courses.length <= tabIndex) ? (
                                 <>
                                     <IconButton>
                                         <Help style={{color: Theme.palette.secondary.main}}/>
@@ -270,7 +270,7 @@ export default () => {
                             )}
                         </div>
                         <div className={clsx(classes.pad)}>
-                            {(courses && courses.length <= tabIndex) ? (
+                            {!courses || (courses && courses.length <= tabIndex) ? (
                                 <TextField
                                     required
                                     label='Course Description'

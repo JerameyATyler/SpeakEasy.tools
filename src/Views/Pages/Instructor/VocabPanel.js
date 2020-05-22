@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import VocabTable from "./VocabTable";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControl from "@material-ui/core/FormControl";
+import {useAuth0} from "../../../react-auth0-spa";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,7 +50,11 @@ const useStyles = makeStyles(theme => ({
 export default ({lessonId}) => {
     const classes = useStyles(Theme);
 
-    const [vocab,] = GetVocabularyLists(lessonId);
+    const {user} = useAuth0();
+
+    const [userId, setUserId] = useState(null);
+
+    const [vocab,] = GetVocabularyLists(lessonId, userId);
     const [vocabId, setVocabId] = useState(null);
     const [vocabName, setVocabName] = useState(null);
     const [vocabDescription, setVocabDescription] = useState(null);
@@ -67,6 +72,7 @@ export default ({lessonId}) => {
 
     const insertedId = InsertVocabularyLists(
         lessonId,
+        userId,
         insertName,
         insertDescription,
         insertPublic
@@ -118,6 +124,10 @@ export default ({lessonId}) => {
         setEditPublic(newPublic);
     };
 
+    useEffect(() => {
+        if (!user) return;
+        setUserId(user.sub);
+    }, [user]);
     useEffect(() => {
         if (!(vocab && vocab.length > tabIndex)) {
             setVocabId(null);
@@ -194,7 +204,7 @@ export default ({lessonId}) => {
                     <Tab label={
                         <>
                             {
-                                vocab && vocab.length <= tabIndex ? (
+                                !vocab || (vocab && vocab.length <= tabIndex) ? (
                                     <TextField
                                         required
                                         label='Add Vocab List'
@@ -216,7 +226,7 @@ export default ({lessonId}) => {
                 <div className={clsx(classes.column)}>
                     <div className={clsx(classes.row)}>
                         <div className={clsx(classes.pad)}>
-                            {vocab && vocab.length <= tabIndex ? (
+                            {!vocab || (vocab && vocab.length <= tabIndex) ? (
                                 <>
                                     <IconButton>
                                         <Help style={{color: Theme.palette.secondary.main}}/>
@@ -273,7 +283,7 @@ export default ({lessonId}) => {
                             )}
                         </div>
                         <div className={clsx(classes.pad)}>
-                            {(vocab && vocab.length <= tabIndex) ? (
+                            {!vocab || (vocab && vocab.length <= tabIndex) ? (
                                 <TextField
                                     required
                                     label='Vocab Description'
@@ -309,7 +319,7 @@ export default ({lessonId}) => {
                             )}
                         </div>
                         <div className={clsx(classes.pad)}>
-                            {(vocab && vocab.length <= tabIndex) ? (
+                            {!vocab || (vocab && vocab.length <= tabIndex) ? (
                                 <FormControl component='fieldset'>
                                     <FormLabel component='legend'>
                                         Visibility

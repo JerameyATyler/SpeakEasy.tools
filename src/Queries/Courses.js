@@ -10,11 +10,6 @@ export const GetCourses = userId => {
                 name
                 description
                 registration_code
-                lessons {
-                    id
-                    name
-                    description
-                }
             }
         }
     `;
@@ -28,7 +23,7 @@ export const GetCourses = userId => {
     });
     useEffect(() => {
         if(!data) return;
-        setCourses(data.courses);
+        setCourses(data['courses']);
     }, [data]);
 
     return [courses, refetch]

@@ -58,7 +58,7 @@ export default ({courseId, userId}) => {
     const [insertName, setInsertName] = useState(null);
     const [insertDescription, setInsertDescription] = useState(null);
 
-    const insertedId = InsertLesson(courseId, userId, insertName, insertDescription);
+    const insertedId = InsertLesson(courseId, insertName, insertDescription);
 
     const [deleteId, setDeleteId] = useState(null);
     const deletedRows = DeleteLesson(deleteId);

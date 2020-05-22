@@ -3,6 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "../../../utils";
 import clsx from "clsx";
 import {ViewWrapper} from "../../../Components/ViewWrapper";
+import Board from "./Board";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,6 +30,9 @@ export default () => {
             <div className={clsx(classes.row)}>
                 <ViewWrapper
                 />
+            </div>
+            <div className={clsx(classes.row)}>
+                <Board/>
             </div>
         </div>
     )

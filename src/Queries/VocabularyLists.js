@@ -2,10 +2,10 @@ import gql from "graphql-tag";
 import {useEffect, useState} from "react";
 import {useMutation, useQuery} from "@apollo/react-hooks";
 
-export const GetVocabularyLists = lessonId => {
+export const GetVocabularyLists = (lessonId, userId) => {
     const VOCABULARYLISTS = gql`
-        query getVocabularyLists($lessonId: Int!) {
-            vocabulary_lists (where: {lesson_id: {_eq: $lessonId}}) {
+        query getVocabularyLists($lessonId: Int!, $userId: String!) {
+            vocabulary_lists (where: {lesson_id: {_eq: $lessonId}, user_id: {_eq: $userId}}) {
                 id
                 name
                 description
@@ -17,7 +17,8 @@ export const GetVocabularyLists = lessonId => {
     const [vocabularyLists, setVocabularyLists] = useState(null);
     const {data, refetch} = useQuery(VOCABULARYLISTS, {
         variables: {
-            lessonId: lessonId
+            lessonId: lessonId,
+            userId: userId
         }
     });
     useEffect(() => {
@@ -28,12 +29,13 @@ export const GetVocabularyLists = lessonId => {
     return [vocabularyLists, refetch];
 };
 
-export const InsertVocabularyLists = (lessonId, name, description, isPublic) => {
+export const InsertVocabularyLists = (lessonId, userId, name, description, isPublic) => {
     /* A GraphQL mutation. Mutations are like queries except they modify the graph. This one accepts variables. */
     const INSERT_VOCABULARY_LISTS = gql`
-        mutation insertVocabularyLists($lessonId: Int!, $name: String!, $description: String!, $isPublic: Boolean!) {
+        mutation insertVocabularyLists($lessonId: Int!, $userId: String!, $name: String!, $description: String!, $isPublic: Boolean!) {
             insert_vocabulary_lists(objects: {
-                lesson_id: $lessonId
+                lesson_id: $lessonId,
+                user_id: $userId,
                 name: $name,
                 description: $description,
                 is_public: $isPublic
@@ -54,15 +56,16 @@ export const InsertVocabularyLists = (lessonId, name, description, isPublic) => 
 
     /* Check the configuration and call the mutation */
     useEffect(() => {
-        if(!(lessonId && isPublic && name && description)) return;
+        if(!(lessonId && userId && (isPublic != null) && name && description)) return;
         insertVocabularyLists({
             variables: {
                 lessonId: lessonId,
+                userId: userId,
                 name: name,
                 description: description,
                 isPublic: isPublic
             }});
-    }, [lessonId, isPublic, name, description, insertVocabularyLists]);
+    }, [lessonId, userId, isPublic, name, description, insertVocabularyLists]);
     /* Check the return value of the mutation and set output */
     useEffect(() => {
         if(!(data && data['insert_vocabulary_lists'])) return;

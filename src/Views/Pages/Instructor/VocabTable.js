@@ -18,7 +18,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import {GetVocabulary} from "../../../Queries";
+import {GetVocabulary, GetVocabularyListsWords} from "../../../Queries";
 import {CircularProgress, TextField} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import clsx from "clsx";
@@ -139,6 +139,8 @@ export default ({vocabId}) => {
         }
     ];
 
+    const [vocabWords, ] = GetVocabularyListsWords(vocabId);
+
     const [searchWord, setSearchWord] = useState(null);
 
     const [newWord, setNewWord] = useState('');
@@ -158,6 +160,9 @@ export default ({vocabId}) => {
         if (!Boolean(newWord.length)) return;
         setSearchWord(newWord);
     }, [newWord]);
+    useEffect(() => {
+        console.log(vocabWords);
+    }, [vocabWords]);
     useEffect(() => {
         if (!vocabulary) return;
         let v = [];

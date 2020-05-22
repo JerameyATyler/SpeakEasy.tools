@@ -5,7 +5,7 @@ import {useMutation, useQuery} from "@apollo/react-hooks";
 export const GetVocabularyListsWords = vocabularyListId => {
     const VOCABULARYLISTSWORDS = gql`
         query getVocabularyListsWords($vocabularyListId: Int!) {
-            vocabulary_lists_words (where: {vocabulary_lists_id: {_eq: $vocabularyListId}}) {
+            vocabulary_list_words (where: {vocabulary_list_id: {_eq: $vocabularyListId}}) {
                 id
                 translations_id
             }
@@ -20,7 +20,7 @@ export const GetVocabularyListsWords = vocabularyListId => {
     });
     useEffect(() => {
         if(!data) return;
-        setVocabularyListsWords(data['vocabulary_lists_words']);
+        setVocabularyListsWords(data['vocabulary_list_words']);
     }, [data]);
 
     return [vocabularyListsWords, refetch];
@@ -30,7 +30,7 @@ export const InsertVocabularyListsWords = (vocabularyListsId, translationId) => 
     /* A GraphQL mutation. Mutations are like queries except they modify the graph. This one accepts variables. */
     const INSERT_VOCABULARY_LISTS_WORDS = gql`
         mutation insertVocabularyLists($vocabularyListsId: Int!, $translationId) {
-            insert_vocabulary_lists(objects: {
+            insert_vocabulary_list_words(objects: {
                 vocabulary_lists_id: $vocabularyListsId,
                 translations_id: $translationId
             }) {
@@ -60,8 +60,8 @@ export const InsertVocabularyListsWords = (vocabularyListsId, translationId) => 
     }, [vocabularyListsId, translationId]);
     /* Check the return value of the mutation and set output */
     useEffect(() => {
-        if(!(data && data['insert_vocabulary_lists_words'])) return;
-        setVocabularyListWordsId(data['insert_vocabulary_lists_words']['returning'][0].id);
+        if(!(data && data['insert_vocabulary_list_words'])) return;
+        setVocabularyListWordsId(data['insert_vocabulary_list_words']['returning'][0].id);
     }, [data]);
 
     return vocabularyListWordsId;
@@ -71,7 +71,7 @@ export const DeleteVocabularyListsWords = (vocabularyListWordsId) => {
     /* A GraphQL mutation. Mutations are like queries except they modify the graph. This one accepts variables. */
     const DELETE_VOCABULARY_LISTS_WORDS = gql`
         mutation deleteVocabularyLists ($vocabularyListWordsId: Int!){
-          delete_vocabulary_lists(where: {id: {_eq: $vocabularyListWordsId}}) {
+          delete_vocabulary_list_words(where: {id: {_eq: $vocabularyListWordsId}}) {
             affected_rows
           }
         }
@@ -92,7 +92,7 @@ export const DeleteVocabularyListsWords = (vocabularyListWordsId) => {
     }, [vocabularyListWordsId, deleteVocabularyListsWords]);
     /* Check the return value of the mutation and set output */
     useEffect(() => {
-        if(!(data && data['delete_vocabulary_lists_words'])) return;
+        if(!(data && data['delete_vocabulary_list_words'])) return;
         setRowsAffected(data);
     }, [data]);
 
