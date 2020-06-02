@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import {ListItemIcon, ListItemText} from "@material-ui/core";
 import {Theme} from "../../utils";
@@ -64,6 +64,7 @@ export default ({userRole}) => {
     const [gamesOpen, setGamesOpen] = useState(false);
     const [infoOpen, setInfoOpen] = useState(false);
     const [toolsOpen, setToolsOpen] = useState(false);
+    const [sideBarOpen, setSideBarOpen] = useState(false)
 
     const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0();
 
@@ -71,6 +72,12 @@ export default ({userRole}) => {
     const toggleGames = () => setGamesOpen(prevState => !prevState);
     const toggleInfo = () => setInfoOpen(prevState => !prevState);
     const toggleTools = () => setToolsOpen(prevState => !prevState);
+
+    // to minimize the sidebar a bit out of the playing area when not in use
+    useEffect(() => {
+        return setSideBarOpen(userOpen || gamesOpen || infoOpen 
+                                || toolsOpen || !isAuthenticated)
+    }, [userOpen, gamesOpen, infoOpen, toolsOpen])
 
     return (
         <div className={clsx(classes.root)}>
@@ -83,10 +90,10 @@ export default ({userRole}) => {
                         >
                             <ListItemAvatar>
                                 <Avatar>
-                                    <img src={user.picture} alt='User avatar'/>
+                                    <img src={user.picture} style={{ maxWidth: "100%" }} alt='User avatar'/>
                                 </Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary='User Menu'/>
+                            {sideBarOpen && <ListItemText primary='User Menu'/>}
                         </ListItem>
                         {userOpen && (
                             <ListItem style={{backgroundColor: Theme.palette.secondary.light}}>
@@ -135,7 +142,7 @@ export default ({userRole}) => {
                                                             style={{color: Theme.palette.secondary.contrastText}}/>
                                                     </Avatar>
                                                 </ListItemAvatar>
-                                                <ListItemText primary='Instructor'/>
+                                                {sideBarOpen && <ListItemText primary='Instructor'/>}
                                             </ListItem>
                                         </NavLink>
                                     )}
@@ -167,7 +174,7 @@ export default ({userRole}) => {
                     <ListItemIcon>
                         <Casino style={{color: Theme.palette.secondary.contrastText}}/>
                     </ListItemIcon>
-                    <ListItemText primary='Games'/>
+                    {sideBarOpen && <ListItemText primary='Games'/>}
                 </ListItem>
                 {gamesOpen && (
                     <ListItem style={{backgroundColor: Theme.palette.secondary.light}}>
@@ -369,7 +376,7 @@ export default ({userRole}) => {
                     <ListItemIcon>
                         <Build style={{color: Theme.palette.secondary.contrastText}}/>
                     </ListItemIcon>
-                    <ListItemText primary='Tools'/>
+                    {sideBarOpen && <ListItemText primary='Tools'/>}
                 </ListItem>
                 {toolsOpen && (
                     <ListItem style={{backgroundColor: Theme.palette.secondary.light}}>
@@ -469,7 +476,7 @@ export default ({userRole}) => {
                     <ListItemIcon>
                         <Info style={{color: Theme.palette.secondary.contrastText}}/>
                     </ListItemIcon>
-                    <ListItemText primary='Information'/>
+                    {sideBarOpen &&  <ListItemText primary='Information'/>}
                 </ListItem>
                 {infoOpen && (
                     <ListItem style={{backgroundColor: Theme.palette.secondary.light}}>

@@ -64,7 +64,7 @@ export default ({
   };
 
   const apiIsLoaded = (map, maps) => {
-    if (map) {
+    if (map && svLat) {
       const panorama = new maps.StreetViewPanorama(panoContainer, {
         // position: { lat: 42.726884, lng: -73.692533 },
         // position: { lat: 31.208505, lng: 121.468125 },

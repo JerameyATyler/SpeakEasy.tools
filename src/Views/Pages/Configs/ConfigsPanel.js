@@ -125,12 +125,15 @@ export default ({moduleId, moduleName}) => {
             handleCancel();
             return;
         }
-        let parsed = JSON.parse(configs[tabIndex]['config']);
-        setFiles([...parsed['files']]);
-        setDropZoneKey(prevState => prevState + 1);
-        delete parsed['files'];
-        setConfigId(configs[tabIndex].id);
-        jsonEditor.set(parsed);
+        // console.log(configs[tabIndex]['config']);
+        try {
+            let parsed = JSON.parse(configs[tabIndex]['config']);
+            setFiles([...parsed['files']]);
+            setDropZoneKey(prevState => prevState + 1);
+            delete parsed['files'];
+            setConfigId(configs[tabIndex].id);
+            jsonEditor.set(parsed);
+        }finally{return console.log("error in parsing json")}
     }, [configs, tabIndex, jsonEditor]);
     useEffect(() => {
         if (!rowsDeleted) return;
@@ -146,7 +149,7 @@ export default ({moduleId, moduleName}) => {
     }, [rowsEdited]);
     useEffect(() => {
         if (!container) return;
-        setJsonEditor(new JSONEditor(container, {}));
+        setJsonEditor(new JSONEditor(container, {mode: "text"}));
     }, [container]);
 
     return (

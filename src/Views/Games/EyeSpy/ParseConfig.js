@@ -18,12 +18,12 @@ export default (configs) => {
                         lng: parseFloat(newConfig['gmap']['center']['lng'])
                     },
                     zoom: parseInt(newConfig['gmap']['zoom']),
-                    markers: newConfig['gmap']['markers'].map(m => {
-                        return {
-                            lat: parseFloat(m.lat),
-                            lng: parseFloat(m.lng)
-                        };
-                    })
+                    // markers: newConfig['gmap']['markers'].map(m => {
+                    //     return {
+                    //         lat: parseFloat(m.lat),
+                    //         lng: parseFloat(m.lng)
+                    //     };
+                    // })
                 };
             }
             delete newConfig['gmap'];
@@ -33,14 +33,26 @@ export default (configs) => {
                 pois = newConfig['pois'].map(p => {
                     return {
                         ...p,
-                        x: parseInt(p.x),
-                        y: parseInt(p.y)
+                        heading: parseInt(p.x),
+                        pitch: parseInt(p.y)
                     };
                 });
             }
             delete newConfig['pois'];
 
-            return({...c, ...newConfig, gmap: gmap, pois: pois});
+            let narrative = [];
+            if ('narrative' in newConfig) {
+                narrative = newConfig['narrative'];
+            }
+            delete newConfig['narrative'];
+
+            let files = [];
+            if ('files' in newConfig) {
+                files = newConfig['files'];
+            }
+            delete newConfig['files'];
+
+            return({...c, ...newConfig, gmap: gmap, files: files, pois: pois, narrative: narrative});
         });
         setParsed(cs);
     }, [configs]);

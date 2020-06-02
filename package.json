@@ -25,6 +25,7 @@
     "machinelearn": "^2.1.5",
     "material-table": "^1.57.2",
     "material-ui-dropzone": "^2.5.0",
+    "pannellum-react": "^1.2.4",
     "papaparse": "^5.2.0",
     "pitchfinder": "^2.2.1",
     "react": "^16.13.1",
