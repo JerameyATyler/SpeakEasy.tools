@@ -36,7 +36,7 @@ export const GetStudentsCourses = userId => {
     const STUDENTS_COURSES = gql`
         query getStudentsCourses($userId: String!) {
             students (where: {user_id: {_eq: $userId}}) {
-                students_courses {
+                course {
                     id
                     name
                     description
@@ -55,7 +55,7 @@ export const GetStudentsCourses = userId => {
     useEffect(() => {
         if(!data) return;
         console.log(data);
-        setStudents(data['students'].map(d => d['students_courses']));
+        setStudents(data['students'].map(d => d['course']));
     }, [data]);
 
     return [students, refetch]
@@ -100,3 +100,59 @@ export const InsertStudent = (userId, registration_code) => {
 
     return affectedRows;
 };
+
+export const GetStudentProfile = userId => {
+    const STUDENTS_PROFILE = gql`
+        query getStudentProfile($userId: String!) {
+            students (where: {user_id: {_eq: $userId}}) {
+                course {
+                    id
+                    name
+                    description
+                    registration_code
+                    lessons {
+                        id
+                        name
+                        description
+                        vocabulary_lists {
+                            id
+                            name
+                            description
+                            vocabulary_list_words {
+                                translation {
+                                    vocabulary_1 {
+                                        id
+                                        word
+                                        language {
+                                            language_label
+                                        }
+                                    }
+                                    vocabulary_2 {
+                                        id
+                                        word
+                                        language {
+                                            language_label
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    `;
+
+    const [profile, setProfile] = useState(null);
+    const {data, refetch} = useQuery(STUDENTS_PROFILE, {
+        variables: {
+            userId: userId
+        },
+    });
+    useEffect(() => {
+        if(!data) return;
+        setProfile(data['students']);
+    }, [data]);
+
+    return [profile, refetch]
+}

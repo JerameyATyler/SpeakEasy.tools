@@ -1,12 +1,10 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "../../../utils";
 import clsx from "clsx";
 import {ViewWrapper} from "../../../Components/ViewWrapper";
 import Instructions from "./Instructions";
 import Settings from "./Settings";
-import QuestionCard from "./QuestionCard";
-import Questions from "./Questions";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,11 +23,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default () => {
+export default ({quiz}) => {
     document.title = 'Pop Quiz';
     const classes = useStyles(Theme);
-
-    const question = Questions();
 
     const settings = Settings();
     const getSettings = () => {
@@ -40,13 +36,13 @@ export default () => {
         return instructions;
     };
     const getScore = () => {
-        let questionCount = question.totalQuestions;
-        let totalCorrect = question.totalCorrect();
-        return Math.round(((totalCorrect / questionCount) + Number.EPSILON) * 100) / 100;
     };
     const getTime = () => {
-        return '--';
     };
+
+    useEffect(() => {
+        if(!quiz) return;
+    }, [quiz])
 
     return (
         <div className={clsx(classes.root)}>
@@ -60,7 +56,6 @@ export default () => {
             </div>
             <div className={clsx(classes.row)}>
                 <div className={clsx(classes.pad)}>
-                    <QuestionCard question={question}/>
                 </div>
             </div>
         </div>

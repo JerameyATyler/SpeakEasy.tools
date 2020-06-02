@@ -20,7 +20,6 @@ const BreadcrumbItem = ({match}) => {
                      color: Theme.palette.secondary.contrastText
                  }}>
             <Typography
-                variant='h4'
                 align='center'
             >
                 {match.url.toUpperCase()}

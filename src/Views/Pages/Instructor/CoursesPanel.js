@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "../../../utils";
 import clsx from "clsx";
-import {useAuth0} from "../../../react-auth0-spa";
 import {DeleteCourse, GetCourses, InsertCourse, UpdateCourse} from "../../../Queries";
 import Typography from "@material-ui/core/Typography";
 import {Add, Check, Clear, Delete, Edit, Help} from "@material-ui/icons";
@@ -13,6 +12,7 @@ import LessonsPanel from "./LessonsPanel";
 import IconButton from "@material-ui/core/IconButton";
 import {generate} from 'shortid';
 import StudentsPanel from "./StudentsPanel";
+import {useAuth} from "../../../Firebase/FirebaseAuth";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,7 +49,8 @@ const useStyles = makeStyles(theme => ({
 export default () => {
     const classes = useStyles(Theme);
 
-    const {user} = useAuth0();
+    const auth = useAuth();
+
     const [userId, setUserId] = useState(null);
 
     const [courses,] = GetCourses(userId);
@@ -112,10 +113,6 @@ export default () => {
     };
 
     useEffect(() => {
-        if (!user) return;
-        setUserId(user.sub);
-    }, [user]);
-    useEffect(() => {
         if (!(courses && courses.length > tabIndex)) {
             setCourseId(null);
             handleClear();
@@ -136,6 +133,10 @@ export default () => {
         if (!editedRows) return;
         window.location.reload();
     }, [editedRows]);
+    useEffect(() => {
+        if (!(auth && auth.user)) return;
+        setUserId(auth.user.uid);
+    }, [auth]);
 
     return (
         <div className={clsx(classes.root)}>

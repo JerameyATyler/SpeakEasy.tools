@@ -6,7 +6,7 @@ export {GetRandomLessons} from './RandomLessons';
 export {GetConfigs, GetConfigsByName, InsertConfig, DeleteConfig, UpdateConfig} from './ModuleConfigs';
 export {GetModules} from './Modules';
 export {GetScores, InsertScore} from './Scores';
-export {GetStudents, GetStudentsCourses, InsertStudent} from './Students';
+export {GetStudents, GetStudentsCourses, GetStudentProfile, InsertStudent} from './Students';
 export {GetTranslations, GetNativeTranslations, GetTargetTranslations} from './Translations';
 export {GetUsers} from './Users';
 export {GetVocabulary} from './Vocabulary';

@@ -72,7 +72,7 @@ export default ({settings, setSelectedSettings}) => {
                         </MenuItem>
                         <MenuItem>
                             <div className={clsx(classes.pad)}>
-                                {settings()}
+                                {settings && settings()}
                             </div>
                         </MenuItem>
                     </Menu>

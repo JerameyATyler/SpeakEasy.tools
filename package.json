@@ -17,6 +17,9 @@
     "apollo-link-http": "^1.5.16",
     "chokidar": "^3.3.1",
     "clsx": "latest",
+    "cors": "^2.8.5",
+    "firebase": "^7.14.6",
+    "firebaseui": "^4.5.0",
     "google-map-react": "^1.1.7",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
@@ -29,11 +32,13 @@
     "pitchfinder": "^2.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-firebaseui": "^4.1.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-timer-hook": "^2.0.0",
     "recharts": "^1.8.5",
+    "recompose": "^0.30.0",
     "shortid": "^2.2.15",
     "typescript": "3.8.3",
     "uuid": "latest",
@@ -70,5 +75,5 @@
     "prettier": "^1.19.1",
     "react-scripts": "^3.4.0"
   },
-  "proxy": "http://speakeasy.services"
+  "proxy": "https://us-central1-speakeasy-263714.cloudfunctions.net"
 }

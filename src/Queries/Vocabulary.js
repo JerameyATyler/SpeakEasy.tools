@@ -43,7 +43,7 @@ export const GetVocabulary = word => {
             }
         }
     `;
-
+    console.log(word)
     const [vocabulary, setVocabulary] = useState(null);
     const {data, loading} = useQuery(VOCABULARY, {
         variables: {
@@ -52,11 +52,11 @@ export const GetVocabulary = word => {
         fetchPolicy: "cache-and-network"
     });
     useEffect(() => {
-        if (!data) return;
-        let vocab = {};
-        data['vocabulary'].forEach(v => {
-            console.log(v);
-        });
+        if (!(data && Boolean(data['vocabulary'].length))) return;
+        let d = data['vocabulary'][0];
+        let vocab = [];
+        if('translations_1' in d) vocab = vocab.concat([...d['translations_1']])
+        if('translations_2' in d) vocab = vocab.concat([...d['translations_2']])
 
         setVocabulary(vocab);
     }, [data]);

@@ -1,19 +1,20 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Avatar, Button, Typography} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import {Translate} from "@material-ui/icons";
 import {Theme} from "../../utils";
 import clsx from "clsx";
-import {NavLink} from "react-router-dom";
 import {Breadcrumbs} from "../Breadcrumbs";
+import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
+        color: theme.palette.secondary.contrastText
     },
     row: {
+        width: '100%',
         display: 'flex',
         flexFlow: 'row noWrap',
         alignItems: 'center'
@@ -29,37 +30,19 @@ export default () => {
     return (
         <div className={clsx(classes.root)}>
             <div className={clsx(classes.row)}>
-                <NavLink to='/home'
-                         activeStyle={{
-                             fontWeight: 'bold',
-                             color: Theme.palette.secondary.contrastText
-                         }}
-                         style={{
-                             color: Theme.palette.secondary.contrastText
-                         }}>
+                <div className={clsx(classes.pad)}>
                     <Button
-                        style={{backgroundColor: Theme.palette.secondary.main}}
+                        component={Link}
+                        to='/'
+                        style={{
+                            backgroundColor: Theme.palette.secondary.main,
+                            color: Theme.palette.secondary.contrastText
+                        }}
                     >
-                        <div >
-                            <Avatar style={{
-                                backgroundColor: Theme.palette.secondary.main,
-                            }}>
-                                <Translate style={{
-                                    color: Theme.palette.secondary.contrastText
-                                }}/>
-                            </Avatar>
-                        </div>
-                        <div >
-                            <Typography
-                                variant='h4'
-                                style={{color: Theme.palette.secondary.contrastText}}
-                            >
-                                SpeakEasy.tools
-                            </Typography>
-                        </div>
+                        <Translate/> SpeakEasy.tools
                     </Button>
-                </NavLink>
-                <div >
+                </div>
+                <div>
                     <Breadcrumbs/>
                 </div>
             </div>

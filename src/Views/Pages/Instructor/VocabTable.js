@@ -18,10 +18,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import {GetVocabulary, GetVocabularyListsWords} from "../../../Queries";
-import {CircularProgress, TextField} from "@material-ui/core";
+import {GetVocabulary, GetVocabularyListsWords, InsertVocabularyListsWords} from "../../../Queries";
+import {TextField} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import clsx from "clsx";
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -77,144 +76,109 @@ const useStyles = makeStyles(theme => ({
 export default ({vocabId}) => {
     const classes = useStyles(Theme);
 
-    const columns = [
-        {
-            title: 'Vocab Word',
-            field: 'word',
-            editComponent: props => (
-                <TextField
-                    value={newWord}
-                    autoFocus
-                    onChange={e => setNewWord(e.target.value)}
-                    label='Vocabulary Word'
-                    placeholder='Vocabulary Word'
-                />
-            )
-        },
-        {
-            title: 'Translations',
-            field: 'translations',
-            editComponent: props => (
-                <div className={clsx(classes.row)}>
-                    {loading ? (
-                        <div className={clsx(classes.pad)}>
-                            <CircularProgress color='secondary'/>
-                        </div>
-                    ) : (
-                        <Autocomplete
-                            multiple
-                            options={formattedVocabulary}
-                            style={{width: 300}}
-                            getOptionLabel={option => option.word}
-                            groupBy={option => option.language}
-                            renderInput={
-                                params =>
-                                    <TextField
-                                        {...params}
-                                        label='Translations'
-                                        variant='outlined'
-                                        placeholder='Translations'
-                                    />
-                            }
-                        />
-                    )}
-                </div>
-            ),
-            render: rowData => (<Autocomplete
-                multiple
-                options={rowData.translations}
-                style={{width: 300}}
-                getOptionLabel={option => option.word}
-                groupBy={option => option.language}
-                renderInput={
-                    params =>
-                        <TextField
-                            {...params}
-                            label='Translations'
-                            variant='outlined'
-                            placeholder='Translations'
-                        />
-                }
-            />)
-        }
-    ];
-
-    const [vocabWords, ] = GetVocabularyListsWords(vocabId);
-
-    const [searchWord, setSearchWord] = useState(null);
+    const [vocabularyListsWords,] = GetVocabularyListsWords(vocabId);
 
     const [newWord, setNewWord] = useState('');
+    const [searchWord, setSearchWord] = useState(null);
 
-    const [vocabulary, loading] = GetVocabulary(searchWord);
-    const [formattedVocabulary, setFormattedVocabulary] = useState([]);
+    const [vocabularySearch, loading] = GetVocabulary(searchWord);
+    const getData = vocabularyListsWords && Boolean(vocabularyListsWords.length) ? vocabularyListsWords.map(v => {
+        return {
+            word: v['translation']['vocabulary_1']['word'],
+            wordLang: v['translation']['vocabulary_1']['language']['language_label'],
+            translation: v['translation']['vocabulary_2']['word'],
+            translationLang: v['translation']['vocabulary_2']['language']['language_label']
+        }
+    }) : [];
 
-    const data = () => {
-        let d = [];
-        return d;
-    }
+    const [translations, setTranslations] = useState([]);
+    const [translation, setTranslation] = useState({});
 
+    const [translationId, setTranslationId] = useState(null);
+    const insertedWord = InsertVocabularyListsWords(vocabId, translationId);
+
+    const handleWordChange = (event) => {
+        setNewWord(event.target.value);
+    };
+    const handleTranslationChange = (event, value) => {
+        setTranslation(value);
+    };
     const handleAdd = () => {
+        setTranslationId(translation['id']);
     };
 
     useEffect(() => {
-        if (!Boolean(newWord.length)) return;
+        if (!(newWord && Boolean(newWord.length))) return;
         setSearchWord(newWord);
     }, [newWord]);
     useEffect(() => {
-        console.log(vocabWords);
-    }, [vocabWords]);
+        if (!(vocabularyListsWords && Boolean(vocabularyListsWords))) return;
+        console.log(vocabularyListsWords)
+    }, [vocabularyListsWords]);
     useEffect(() => {
-        if (!vocabulary) return;
-        let v = [];
-        Object.keys(vocabulary).forEach(k => vocabulary[k].forEach(w => v.push({language: k, word: w})));
-        v = v.sort((a, b) => -b.word.localeCompare(a.word));
-        v = v.sort((a, b) => -b.language.localeCompare(a.language));
+        if (!(vocabularySearch && Boolean(vocabularySearch.length))) return;
+        setTranslations(vocabularySearch.map(v => {
+            return {
+                id: v['id'],
+                language: v['vocabulary_1']['language']['language_label'] + ' -> ' + v['vocabulary_2']['language']['language_label'],
+                translation: v['vocabulary_1']['word'] + ' -> ' + v['vocabulary_2']['word']
+            }
+        }));
+    }, [vocabularySearch]);
+    useEffect(() => {
+        if (!insertedWord) return;
+    }, [insertedWord]);
 
-        setFormattedVocabulary(v);
-    }, [vocabulary]);
-
+    const columns = [
+        {
+            title: 'Word',
+            field: 'word',
+            editComponent: props => (
+                <TextField
+                    autoFocus
+                    value={newWord}
+                    onChange={handleWordChange}
+                    label='Search'
+                />
+            ),
+            render: rowData => <TextField value={rowData.word} variant='outlined' label={rowData.wordLang} disabled/>
+        },
+        {
+            title: 'Translation',
+            field: 'translation',
+            editComponent: props => (
+                <Autocomplete
+                    style={{width: 300}}
+                    groupBy={option => option.language}
+                    options={translations && Boolean(translations.length) ? translations : []}
+                    getOptionLabel={option => option.translation}
+                    renderInput={params => <TextField {...params} label='Translations' variant='outlined'/>}
+                    onChange={handleTranslationChange}
+                />
+            ),
+            render: rowData => <TextField value={rowData.translation} variant='outlined' label={rowData.translationLang}
+                                          disabled/>
+        }
+    ];
     return (
-        <MaterialTable
-            title='Vocab'
-            icons={tableIcons}
-            columns={columns}
-            data={data()}
-            editable={{
-                onRowAdd: newData => new Promise(resolve => {
-                    setTimeout(() => {
-                        resolve();
-                        handleAdd();
-                    }, 600);
-                }),
-                onRowUpdate: (newData, oldData) => new Promise(resolve => {
-                    setTimeout(() => {
-                        resolve();
-                        if (oldData) {
-
-                        }
-                    }, 600);
-                }),
-                onRowDelete: oldData => new Promise(resolve => {
-                    setTimeout(() => {
-                        resolve();
-                    }, 600);
-                }),
-            }}
-            options={{
-                headerStyle: {
-                    backgroundColor: Theme.palette.secondary.light,
-                    color: Theme.palette.secondary.contrastText
-                },
-                rowStyle: {
-                    backgroundColor: Theme.palette.primary.light,
-                    color: Theme.palette.primary.contrastText
-                }
-            }}
-            style={{
-                backgroundColor: Theme.palette.primary.main,
-                color: Theme.palette.primary.contrastText,
-                minWidth: 500,
-            }}
-        />
+        <div style={{maxWidth: '100%'}}>
+            <MaterialTable
+                columns={columns}
+                icons={tableIcons}
+                data={getData}
+                editable={{
+                    onRowAdd: newData =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                handleAdd();
+                                resolve();
+                            }, 1000)
+                        })
+                }}
+                options={{
+                    actionsColumnIndex: -1
+                }}
+            />
+        </div>
     );
 };

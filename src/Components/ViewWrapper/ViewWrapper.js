@@ -7,7 +7,6 @@ import {InstructionsButton} from "../InstructionsButton";
 import {HomeButton} from "../HomeButton";
 import {ScoreBoard} from "../ScoreBoard";
 import {Timer} from "../Timer";
-import {Agent} from "../Agent";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -52,9 +51,6 @@ export default ({settings, setSelectedSettings, instructions, score, timer}) => 
                         </div>
                     )
                 }
-                <div className={clsx(classes.pad)}>
-                    <Agent/>
-                </div>
             </div>
         </div>
     )

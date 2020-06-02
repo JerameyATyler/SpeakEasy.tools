@@ -13,7 +13,6 @@ import IconButton from "@material-ui/core/IconButton";
 import VocabTable from "./VocabTable";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControl from "@material-ui/core/FormControl";
-import {useAuth0} from "../../../react-auth0-spa";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -50,7 +49,6 @@ const useStyles = makeStyles(theme => ({
 export default ({lessonId}) => {
     const classes = useStyles(Theme);
 
-    const {user} = useAuth0();
 
     const [userId, setUserId] = useState(null);
 
@@ -124,10 +122,6 @@ export default ({lessonId}) => {
         setEditPublic(newPublic);
     };
 
-    useEffect(() => {
-        if (!user) return;
-        setUserId(user.sub);
-    }, [user]);
     useEffect(() => {
         if (!(vocab && vocab.length > tabIndex)) {
             setVocabId(null);
@@ -226,7 +220,7 @@ export default ({lessonId}) => {
                 <div className={clsx(classes.column)}>
                     <div className={clsx(classes.row)}>
                         <div className={clsx(classes.pad)}>
-                            {!vocab || (vocab && vocab.length <= tabIndex) ? (
+                            {false ? (
                                 <>
                                     <IconButton>
                                         <Help style={{color: Theme.palette.secondary.main}}/>

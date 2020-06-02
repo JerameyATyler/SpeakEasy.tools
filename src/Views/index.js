@@ -3,7 +3,7 @@ export {EyeSpy} from './Games/EyeSpy';
 export {Jeopardy} from './Games/Jeopardy';
 export {Kakuro} from './Games/Kakuro';
 export {Memory} from './Games/Memory';
-export {SimonSays} from './Games/SimonSays';
+export {Simon} from './Games/Simon';
 export {Sudoku} from './Games/Sudoku';
 export {TileSlider} from './Games/TileSlider';
 export {TotD} from './Games/TypingOfTheDead';

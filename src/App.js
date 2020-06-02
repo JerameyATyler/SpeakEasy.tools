@@ -2,9 +2,8 @@
 * This file is your actual application.
 */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Switch} from "react-router";
-import {useAuth0} from "./react-auth0-spa";
 import {ApolloClient} from "apollo-client";
 import {HttpLink} from 'apollo-link-http';
 import {setContext} from 'apollo-link-context';
@@ -12,11 +11,11 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ApolloProvider} from '@apollo/react-hooks';
 import {CssBaseline, makeStyles, Typography} from "@material-ui/core";
 import clsx from 'clsx';
-import jwt from 'jsonwebtoken';
 
-import {Routes} from "./Routes";
+import {BuildRoutes} from "./Routes";
 import {GRAPHQL_URL, Theme} from "./utils";
 import {SideBar} from "./Components";
+import {useAuth} from "./Firebase/FirebaseAuth";
 
 /* This object sets up the CSS class names that will be used for this component. */
 const useStyles = makeStyles(theme => ({
@@ -36,52 +35,23 @@ const useStyles = makeStyles(theme => ({
     content: {
         flex: '1 1 100%',
     },
-    column: {
-    }
+    column: {}
 }));
 
 export default () => {
     /* Passes our Theme to the classes above, allowing us to access properties of the Theme like palette. */
     const classes = useStyles(Theme);
+
+    const auth = useAuth();
+
     /* The user's access token. Lets them access data based on their role; admin, user, or anonymous. */
     const [accessToken, setAccessToken] = useState('');
-    const {getTokenSilently, loading} = useAuth0();
-    const [userRole, setUserRole] = useState('anonymous');
-    /* Simple component to show while the page is loading */
-    const LoadingComponent = () => {
-        return (
-            <div className={clsx(classes.root)}>
-                {/* CssBaseline helps make CSS look the same across different browsers */}
-                <CssBaseline/>
-                <div className={clsx(classes.content)}>
-                    <Typography
-                        variant='h4'
-                    >
-                        Loading...
-                    </Typography>
-                </div>
-            </div>)
-    };
-
-    if (loading) {
-        return <LoadingComponent/>
-    }
+    const [userRole, setUserRole] = useState('admin');
 
     /*
     * Fetch the token asynchronously so it doesn't lock loading of other visual elements. If it fails display
     * an error message in the console.
     */
-    const getAccessToken = async () => {
-        try {
-            const token = await getTokenSilently();
-            const role = await jwt.decode(token)['https://hasura.io/jwt/claims']['x-hasura-default-role'];
-            setAccessToken(token);
-            setUserRole(role);
-        } catch (e) {
-            console.error(e);
-        }
-    };
-    getAccessToken();
 
     /* HTTP link to the GraphQL engine */
     const httpLink = new HttpLink({
@@ -89,7 +59,7 @@ export default () => {
     });
     /* Appends necessary headers to requests so that GraphQL engine can validate user access. */
     const authLink = setContext((_, {headers}) => {
-        if (accessToken) {
+        if (Boolean(accessToken)) {
             return {
                 headers: {
                     ...headers,
@@ -111,6 +81,11 @@ export default () => {
         cache: new InMemoryCache()
     });
 
+    useEffect(() => {
+        if(!(auth && auth['token'])) return;
+        setAccessToken(auth['token']);
+    }, [auth]);
+
     /*
     * Apollo Provider wraps the application so that any page within the application will use the same Apollo Provider.
     * Outer div conforms to fill the view port. Inner div fills its parent. Switch handles changing the application's
@@ -120,17 +95,19 @@ export default () => {
     */
     return (
         <ApolloProvider client={client}>
+
             <div className={clsx(classes.root)}>
                 <CssBaseline/>
                 <div className={clsx(classes.column)}>
-                    <SideBar userRole={userRole}/>
+                    <SideBar/>
                 </div>
                 <div className={clsx(classes.content)}>
                     <Switch>
-                        {Routes()}
+                        {BuildRoutes(userRole)}
                     </Switch>
                 </div>
             </div>
+
         </ApolloProvider>
     );
 }

@@ -72,7 +72,7 @@ export default ({instructions}) => {
                         </MenuItem>
                         <MenuItem>
                             <div className={clsx(classes.pad)}>
-                                {instructions()}
+                                {instructions && instructions()}
                             </div>
                         </MenuItem>
                     </Menu>

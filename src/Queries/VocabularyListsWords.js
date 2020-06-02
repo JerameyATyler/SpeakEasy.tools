@@ -7,7 +7,23 @@ export const GetVocabularyListsWords = vocabularyListId => {
         query getVocabularyListsWords($vocabularyListId: Int!) {
             vocabulary_list_words (where: {vocabulary_list_id: {_eq: $vocabularyListId}}) {
                 id
-                translations_id
+                translation_id
+                translation {
+                    vocabulary_1 {
+                        id
+                        word
+                        language {
+                            language_label
+                        }
+                    }
+                    vocabulary_2 {
+                        id
+                        word
+                        language {
+                            language_label
+                        }
+                    }
+                }
             }
         }
     `;
@@ -29,10 +45,10 @@ export const GetVocabularyListsWords = vocabularyListId => {
 export const InsertVocabularyListsWords = (vocabularyListsId, translationId) => {
     /* A GraphQL mutation. Mutations are like queries except they modify the graph. This one accepts variables. */
     const INSERT_VOCABULARY_LISTS_WORDS = gql`
-        mutation insertVocabularyLists($vocabularyListsId: Int!, $translationId) {
+        mutation insertVocabularyLists($vocabularyListsId: Int!, $translationId: Int!) {
             insert_vocabulary_list_words(objects: {
-                vocabulary_lists_id: $vocabularyListsId,
-                translations_id: $translationId
+                vocabulary_list_id: $vocabularyListsId,
+                translation_id: $translationId
             }) {
                 affected_rows
                 returning {
@@ -50,8 +66,7 @@ export const InsertVocabularyListsWords = (vocabularyListsId, translationId) => 
 
     /* Check the configuration and call the mutation */
     useEffect(() => {
-        if(!(vocabularyListsId, translationId)) return;
-        console.log(vocabularyListsId, translationId)
+        if(!(vocabularyListsId && translationId)) return;
         insertVocabularyListsWords({
             variables: {
                 vocabularyListsId: vocabularyListsId,

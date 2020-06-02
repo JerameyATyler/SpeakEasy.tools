@@ -2,10 +2,8 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Theme} from "../../../utils";
 import clsx from "clsx";
-import {ViewWrapper} from "../../../Components/ViewWrapper";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import {useAuth0} from "../../../react-auth0-spa";
+import {HOME} from '../../../Routes/Routes';
+import FirebaseUI from "../../../Firebase/FirebaseUI";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,44 +29,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default () => {
-    document.title = 'Home';
+    document.title = HOME.name;
     const classes = useStyles(Theme);
-
-    const {user, isAuthenticated} = useAuth0();
 
     return (
         <div className={clsx(classes.root)}>
             <div className={clsx(classes.row)}>
-                <ViewWrapper
-                />
-            </div>
-            <div className={clsx(classes.row)}>
                 <div className={clsx(classes.pad)}>
-                    <Typography
-                        style={{color: Theme.palette.primary.contrastText}}
-                        variant='h4'
-                    >
-                        Welcome to SpeakEasy.tools!
-                    </Typography>
-                    <Divider/>
-                </div>
-            </div>
-            <div className={clsx(classes.row)}>
-                <div className={clsx(classes.pad)}>
-                    {user && isAuthenticated && (
-                        <Typography
-                            style={{color: Theme.palette.primary.contrastText}}
-                        >
-                            Open the user menu to go to your profile or sign out. Open the 'Tools and Games' menu to go play around or explore.
-                        </Typography>
-                    )}
-                    {!(user && isAuthenticated) && (
-                        <Typography
-                            style={{color: Theme.palette.primary.contrastText}}
-                        >
-                            Sign in using the 'Sign In' button or open the 'Tools and Games' menu to use our tools anonymously.
-                        </Typography>
-                    )}
                 </div>
             </div>
         </div>
