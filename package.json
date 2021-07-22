@@ -42,7 +42,7 @@
     "shortid": "^2.2.15",
     "typescript": "3.8.3",
     "uuid": "latest",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.17.0"
   },
   "scripts": {
     "start": "react-scripts start",
