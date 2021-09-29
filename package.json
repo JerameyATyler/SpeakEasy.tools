@@ -23,7 +23,7 @@
     "google-map-react": "^1.1.7",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
-    "jsoneditor": "^8.6.8",
+    "jsoneditor": "^9.5.6",
     "jsonwebtoken": "^8.5.1",
     "machinelearn": "^2.1.5",
     "material-table": "^1.57.2",
